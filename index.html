@@ -233,6 +233,17 @@
 
 <body class="bg-background selection:bg-primary/30">
 
+<!-- Scroll to top on page load -->
+<script>
+  window.addEventListener('load', () => {
+    window.scrollTo(0, 0);
+  });
+  // Also ensure scroll to top on page refresh/navigation
+  if (window.location.hash === '') {
+    window.scrollTo(0, 0);
+  }
+</script>
+
 <!-- ╔═══════════════════════════════════════════════════╗
      ║  GLOBAL SCANLINE OVERLAY                         ║
      ╚═══════════════════════════════════════════════════╝ -->
