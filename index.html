@@ -475,9 +475,22 @@
        ══════════════════════════════════════════════════ -->
   <section id="hero" class="relative min-h-screen flex flex-col justify-center px-6 md:px-20 overflow-hidden">
     <div class="grid-overlay absolute inset-0 z-0"></div>
-    <!-- Hero Background Image -->
+    <!-- Hero Background Video -->
     <div class="absolute right-0 top-1/2 -translate-y-1/2 w-full md:w-1/2 h-full opacity-30 md:opacity-50 pointer-events-none grayscale contrast-125 mix-blend-screen">
-      <img alt="Cybernetic network" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAisdXiQE_oqsuhzBO1o7odOmhDlgk0oc3cWqNa83_GaEbJVghUNM4crampyE-5SWFnIrornuRVrELulG35_HNpA5BsbFhuHCh7pH3mpULbpxbpymMStV7xoYBeP4Zg58-QVPrwRoUB_eUEaKRxfk7zVPb9yd1Ta152q0qBGLiL1oBI8Vx5nnjpREDh4DFVo_PoVt0CZyUkgSFmFpnbVy5F1DARwOao_22d_tZ3WpW80lKm10-_7Jag4j7ufq7pCsPcGpxkbNrTuZJj"/>
+      <video
+        class="w-full h-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-hidden="true"
+      >
+        <source src="IMG_3225.mp4" type="video/mp4"/>
+        <source src="IMG_3225.mov" type="video/quicktime"/>
+        <!-- Fallback image if video fails to load -->
+        <img alt="Cybernetic network" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAisdXiQE_oqsuhzBO1o7odOmhDlgk0oc3cWqNa83_GaEbJVghUNM4crampyE-5SWFnIrornuRVrELulG35_HNpA5BsbFhuHCh7pH3mpULbpxbpymMStV7xoYBeP4Zg58-QVPrwRoUB_eUEaKRxfk7zVPb9yd1Ta152q0qBGLiL1oBI8Vx5nnjpREDh4DFVo_PoVt0CZyUkgSFmFpnbVy5F1DARwOao_22d_tZ3WpW80lKm10-_7Jag4j7ufq7pCsPcGpxkbNrTuZJj"/>
+      </video>
     </div>
     <div class="relative z-10 max-w-4xl">
       <p class="font-label text-primary text-sm tracking-[0.3em] mb-4 uppercase" data-i18n="hero-protocol">_SECURE_PROTOCOLS_ENGAGED</p>
