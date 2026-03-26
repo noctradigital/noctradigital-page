@@ -233,14 +233,26 @@
 
 <body class="bg-background selection:bg-primary/30">
 
-<!-- Scroll to top on page load -->
+<!-- Scroll to top on page load (mobile + desktop compatible) -->
 <script>
-  window.addEventListener('load', () => {
+  function scrollToTop() {
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+  }
+  
+  // Execute on DOMContentLoaded for early scroll
+  document.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(scrollToTop);
   });
-  // Also ensure scroll to top on page refresh/navigation
+  
+  // Execute on load event for full page resource loading
+  window.addEventListener('load', () => {
+    requestAnimationFrame(scrollToTop);
+  });
+  
+  // Ensure scroll to top on page refresh/navigation without hash
   if (window.location.hash === '') {
-    window.scrollTo(0, 0);
+    requestAnimationFrame(scrollToTop);
   }
 </script>
 
