@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+live-intel-backend/node_modules/
+
+# Environment files
+.env
+.env.*
+!*.env.example
+live-intel-backend/.env
+
+# Generated local outputs
+eu-paths-log.txt
+eu-paths-output.txt
