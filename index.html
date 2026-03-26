@@ -235,19 +235,30 @@
 
 <!-- Scroll to top on page load (mobile + desktop compatible) -->
 <script>
+  // Disable browser scroll restoration
+  if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual';
+  }
+  
   function scrollToTop() {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }
+  
+  // Execute immediately
+  scrollToTop();
   
   // Execute on DOMContentLoaded for early scroll
   document.addEventListener('DOMContentLoaded', () => {
-    requestAnimationFrame(scrollToTop);
+    requestAnimationFrame(() => scrollToTop());
   });
   
   // Execute on load event for full page resource loading
   window.addEventListener('load', () => {
-    requestAnimationFrame(scrollToTop);
+    requestAnimationFrame(() => scrollToTop());
+    // Extra safety: also try after a short delay
+    setTimeout(scrollToTop, 100);
   });
   
   // Ensure scroll to top on page refresh/navigation without hash
