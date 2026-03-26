@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Noctra Digital // Kamil Szeibel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+  /* ═══════════════════════════════════════════════════════
+     Noctra Digital — Unified Cyber-Noir Landing Page
+     Design System: "Kamil Szeibel"
+     ═══════════════════════════════════════════════════════ */
+
+  body {
+    background-color: #131313;
+    color: #e5e2e1;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Global Scanline Overlay */
+  .scanline-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.03) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* Grid Dot Overlay */
+  .grid-overlay {
+    background-image: radial-gradient(circle, #603e39 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.1;
+  }
+
+  /* Material Symbols */
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  /* Red LED Glow */
+  .red-glow {
+    box-shadow: 0 0 32px 0 rgba(150, 7, 17, 0.15);
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: #131313; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #960711; }
+
+  /* Terminal Cursor Blink */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  .terminal-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.2em;
+    background-color: #ffb4a8;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+  .terminal-cursor-text::after {
+    content: '_';
+    animation: blink 1s step-end infinite;
+  }
+  .typing-line {
+    display: block;
+    min-height: 1.5em;
+  }
+
+  /* Radar Sweep Animation */
+  @keyframes radarSweep {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .radar-sweep {
+    animation: radarSweep 4s linear infinite;
+  }
+
+  /* Radar Pulse */
+  @keyframes radarPulse {
+    0% { transform: scale(0.8); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0.6; }
+  }
+  .radar-pulse {
+    animation: radarPulse 2s ease-in-out infinite;
+  }
+
+  /* Scroll-triggered fade-in */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Active nav indicator */
+  .nav-link.active {
+    color: #ffb4a8 !important;
+    border-bottom: 2px solid #ffb4a8;
+  }
+  .side-nav-link.active span:first-child {
+    color: #ffb4a8 !important;
+  }
+
+  /* Stat counter animation */
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stat-animate {
+    animation: countUp 0.6s ease forwards;
+  }
+
+  /* Glitch text effect for hero */
+  @keyframes glitch {
+    0% { text-shadow: 2px 0 #ff5540, -2px 0 #960711; }
+    25% { text-shadow: -2px 0 #ff5540, 2px 0 #960711; }
+    50% { text-shadow: 2px 2px #ff5540, -2px -2px #960711; }
+    75% { text-shadow: -2px 2px #ff5540, 2px -2px #960711; }
+    100% { text-shadow: 2px 0 #ff5540, -2px 0 #960711; }
+  }
+  .glitch-hover:hover {
+    animation: glitch 0.3s ease infinite;
+  }
+  .glitch-always {
+    animation: glitch 0.3s ease infinite;
+  }
+
+  /* Global status glitch transition */
+  @keyframes statusGlitch {
+    0% { transform: translateX(0); text-shadow: 0 0 0 transparent; }
+    20% { transform: translateX(-2px); text-shadow: 2px 0 #ff5540, -2px 0 #960711; }
+    40% { transform: translateX(2px); text-shadow: -2px 0 #ff5540, 2px 0 #960711; }
+    60% { transform: translateX(-1px); text-shadow: 2px 1px #ff5540, -2px -1px #960711; }
+    80% { transform: translateX(1px); text-shadow: -2px 1px #ff5540, 2px -1px #960711; }
+    100% { transform: translateX(0); text-shadow: 0 0 0 transparent; }
+  }
+  .status-glitch {
+    animation: statusGlitch 0.55s steps(2, end);
+  }
+
+  /* Smooth background transition for nav */
+  .header-scrolled {
+    background-color: rgba(19,19,19,0.95) !important;
+    border-bottom-color: rgba(255,85,64,0.2) !important;
+  }
+
+  /* Brand label offset (position set via JS from saved state) */
+  #topbar-brand {
+    --brand-offset-x: 0px;
+    display: inline-block;
+    transform: translateX(var(--brand-offset-x));
+  }
+</style>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ffb4a8",
+          "tertiary-fixed": "#d7e2ff",
+          "on-error-container": "#ffdad6",
+          "outline-variant": "#603e39",
+          "on-error": "#690005",
+          "surface-container-highest": "#353534",
+          "surface-container-lowest": "#0e0e0e",
+          "primary-fixed-dim": "#ffb4a8",
+          "secondary-fixed-dim": "#ffb4ac",
+          "primary-container": "#ff5540",
+          "inverse-primary": "#c00100",
+          "surface-container-high": "#2a2a2a",
+          "on-primary-fixed": "#410000",
+          "secondary-container": "#960711",
+          "surface-variant": "#353534",
+          "on-secondary-fixed": "#410003",
+          "on-primary-fixed-variant": "#930100",
+          "inverse-surface": "#e5e2e1",
+          "secondary-fixed": "#ffdad6",
+          "on-surface": "#e5e2e1",
+          "on-secondary-fixed-variant": "#92030f",
+          "secondary": "#ffb4ac",
+          "on-primary-container": "#5c0000",
+          "surface-tint": "#ffb4a8",
+          "on-secondary": "#690007",
+          "on-tertiary-fixed": "#001a40",
+          "on-surface-variant": "#ebbbb4",
+          "on-tertiary-fixed-variant": "#004491",
+          "primary-fixed": "#ffdad4",
+          "background": "#131313",
+          "outline": "#b18780",
+          "on-primary": "#690100",
+          "tertiary": "#acc7ff",
+          "on-secondary-container": "#ff9f95",
+          "surface-dim": "#131313",
+          "inverse-on-surface": "#313030",
+          "surface-container-low": "#1c1b1b",
+          "on-background": "#e5e2e1",
+          "tertiary-container": "#488fff",
+          "surface-bright": "#393939",
+          "surface-container": "#201f1f",
+          "surface": "#131313",
+          "tertiary-fixed-dim": "#acc7ff",
+          "on-tertiary-container": "#00285b",
+          "error": "#ffb4ab",
+          "on-tertiary": "#002f67",
+          "error-container": "#93000a"
+        },
+        fontFamily: {
+          "headline": ["Space Grotesk"],
+          "body": ["Inter"],
+          "label": ["Space Grotesk"]
+        },
+        borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+      },
+    },
+  }
+</script>
+</head>
+
+<body class="bg-background selection:bg-primary/30">
+
+<!-- ╔═══════════════════════════════════════════════════╗
+     ║  GLOBAL SCANLINE OVERLAY                         ║
+     ╚═══════════════════════════════════════════════════╝ -->
+<div class="scanline-overlay"></div>
+
+<!-- ╔═══════════════════════════════════════════════════╗
+     ║  TOP APP BAR                                     ║
+     ╚═══════════════════════════════════════════════════╝ -->
+<header id="topbar" class="fixed top-0 w-full z-50 border-b border-secondary-container/20 bg-[#131313]/60 backdrop-blur-xl flex justify-between items-center px-6 h-16 shadow-[0_0_32px_rgba(150,7,17,0.15)] transition-all duration-300">
+  <a id="topbar-brand" href="#hero" class="text-xl font-black tracking-tighter text-primary italic font-headline">Noctra Digital</a>
+  <nav class="hidden md:flex space-x-8">
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#hero">Home</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#terminal">Terminal</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#radar">Radar</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#capabilities">Mission</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#engagements">Portfolio</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#contact">Contact</a>
+  </nav>
+  <button class="bg-primary text-on-primary px-4 py-2 font-headline text-xs font-bold tracking-widest uppercase hover:shadow-[0_0_15px_rgba(255,85,64,0.3)] transition-all active:scale-95">
+    BREACH_PROTECTION
+  </button>
+  <!-- Mobile Menu Toggle -->
+  <button id="mobile-menu-btn" class="md:hidden text-primary">
+    <span class="material-symbols-outlined">menu</span>
+  </button>
+</header>
+
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu" class="fixed inset-0 bg-[#131313]/95 backdrop-blur-xl z-[55] flex flex-col items-center justify-center space-y-8 hidden">
+  <button id="mobile-menu-close" class="absolute top-6 right-6 text-primary"><span class="material-symbols-outlined text-3xl">close</span></button>
+  <a class="font-headline uppercase tracking-widest text-2xl text-primary hover:text-primary-container transition-colors" href="#hero" onclick="closeMobileMenu()">HOME</a>
+  <a class="font-headline uppercase tracking-widest text-2xl text-white/60 hover:text-primary transition-colors" href="#terminal" onclick="closeMobileMenu()">TERMINAL</a>
+  <a class="font-headline uppercase tracking-widest text-2xl text-white/60 hover:text-primary transition-colors" href="#radar" onclick="closeMobileMenu()">RADAR</a>
+  <a class="font-headline uppercase tracking-widest text-2xl text-white/60 hover:text-primary transition-colors" href="#capabilities" onclick="closeMobileMenu()">MISSION</a>
+  <a class="font-headline uppercase tracking-widest text-2xl text-white/60 hover:text-primary transition-colors" href="#engagements" onclick="closeMobileMenu()">PORTFOLIO</a>
+  <a class="font-headline uppercase tracking-widest text-2xl text-white/60 hover:text-primary transition-colors" href="#contact" onclick="closeMobileMenu()">CONTACT</a>
+</div>
+
+<!-- ╔═══════════════════════════════════════════════════╗
+     ║  SIDE NAV BAR (Desktop)                          ║
+     ╚═══════════════════════════════════════════════════╝ -->
+<aside class="hidden lg:flex fixed left-0 top-0 h-full w-20 z-[60] border-r border-secondary-container/20 bg-surface-container-low flex-col items-center py-24 space-y-12">
+  <div class="flex flex-col items-center space-y-8">
+    <a class="side-nav-link group relative text-primary transition-all" href="#terminal" data-section="terminal">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+      <span class="absolute left-16 bg-surface-container-high px-2 py-1 text-[10px] font-label opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">TERMINAL</span>
+    </a>
+    <a class="side-nav-link group relative text-white/40 hover:text-primary transition-all" href="#radar" data-section="radar">
+      <span class="material-symbols-outlined">radar</span>
+      <span class="absolute left-16 bg-surface-container-high px-2 py-1 text-[10px] font-label opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">RADAR</span>
+    </a>
+    <a class="side-nav-link group relative text-white/40 hover:text-primary transition-all" href="#engagements" data-section="engagements">
+      <span class="material-symbols-outlined">receipt_long</span>
+      <span class="absolute left-16 bg-surface-container-high px-2 py-1 text-[10px] font-label opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">LOGS</span>
+    </a>
+    <a class="side-nav-link group relative text-white/40 hover:text-primary transition-all" href="#contact" data-section="contact">
+      <span class="material-symbols-outlined">settings_input_antenna</span>
+      <span class="absolute left-16 bg-surface-container-high px-2 py-1 text-[10px] font-label opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">UPLINK</span>
+    </a>
+  </div>
+  <div class="mt-auto rotate-180 [writing-mode:vertical-lr] font-label text-[10px] tracking-[0.5em] text-white/20 uppercase">
+    Noctra_Digital// 0.1.4
+  </div>
+</aside>
+
+<!-- ╔═══════════════════════════════════════════════════╗
+     ║  MAIN CONTENT                                    ║
+     ╚═══════════════════════════════════════════════════╝ -->
+<main class="lg:ml-20">
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 1: HERO
+       ══════════════════════════════════════════════════ -->
+  <section id="hero" class="relative min-h-screen flex flex-col justify-center px-6 md:px-20 overflow-hidden">
+    <div class="grid-overlay absolute inset-0 z-0"></div>
+    <!-- Hero Background Image -->
+    <div class="absolute right-0 top-1/2 -translate-y-1/2 w-full md:w-1/2 h-full opacity-30 md:opacity-50 pointer-events-none grayscale contrast-125 mix-blend-screen">
+      <img alt="Cybernetic network" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAisdXiQE_oqsuhzBO1o7odOmhDlgk0oc3cWqNa83_GaEbJVghUNM4crampyE-5SWFnIrornuRVrELulG35_HNpA5BsbFhuHCh7pH3mpULbpxbpymMStV7xoYBeP4Zg58-QVPrwRoUB_eUEaKRxfk7zVPb9yd1Ta152q0qBGLiL1oBI8Vx5nnjpREDh4DFVo_PoVt0CZyUkgSFmFpnbVy5F1DARwOao_22d_tZ3WpW80lKm10-_7Jag4j7ufq7pCsPcGpxkbNrTuZJj"/>
+    </div>
+    <div class="relative z-10 max-w-4xl">
+      <p class="font-label text-primary text-sm tracking-[0.3em] mb-4 uppercase">_SECURE_PROTOCOLS_ENGAGED</p>
+      <h1 class="font-headline text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter mb-8 uppercase italic glitch-hover glitch-always">
+        Digital <br/><span class="text-primary-container">Fortresses</span> <br/>Secured.
+      </h1>
+      <p class="font-body text-lg text-white/60 max-w-xl mb-10 leading-relaxed">
+        Elite penetration testing and architectural hardening for the next generation of decentralized infrastructure. We find the holes before the adversaries do.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="#capabilities" class="bg-primary text-on-primary px-8 py-4 font-headline font-bold tracking-widest uppercase hover:shadow-[0_0_25px_rgba(255,180,168,0.4)] transition-all inline-block">
+          DEPLOY DEFENSES
+        </a>
+        <a href="#radar" class="border border-outline/30 px-8 py-4 font-headline font-bold tracking-widest uppercase text-primary hover:bg-primary/10 transition-all inline-block">
+          _VIEW_INTEL
+        </a>
+      </div>
+    </div>
+    <!-- Status Badge -->
+    <div class="absolute bottom-12 right-12 hidden md:block">
+      <div class="flex items-center space-x-4 border-l border-secondary-container/40 pl-6 py-2">
+        <div class="text-right">
+          <div class="font-label text-[10px] text-white/40 uppercase">Global Status</div>
+          <div id="global-status-text" class="font-headline text-primary font-bold transition-colors duration-300">STABLE // NO BREACH</div>
+        </div>
+      </div>
+    </div>
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+      <span class="font-label text-[9px] text-white/20 uppercase tracking-widest">SCROLL</span>
+      <span class="material-symbols-outlined text-white/20 text-sm">expand_more</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 2: ANIMATED TERMINAL (About/Profile)
+       ══════════════════════════════════════════════════ -->
+  <section id="terminal" class="py-24 px-6 md:px-20 bg-surface-container-lowest">
+    <div class="max-w-6xl mx-auto reveal">
+      <div class="border border-secondary-container/20 bg-surface-container-low shadow-2xl red-glow">
+        <!-- Terminal Chrome -->
+        <div class="flex items-center justify-between px-4 py-2 border-b border-secondary-container/20 bg-surface-container">
+          <div class="flex space-x-2">
+            <div class="w-3 h-3 bg-secondary-container/40"></div>
+            <div class="w-3 h-3 bg-secondary-container/40"></div>
+            <div class="w-3 h-3 bg-secondary-container/40"></div>
+          </div>
+          <div class="font-label text-[10px] text-white/40 uppercase">root@kamil: ~/about_me/profile.sh</div>
+          <div class="text-white/20"><span class="material-symbols-outlined text-sm">close</span></div>
+        </div>
+        <!-- Terminal Content -->
+        <div class="p-8 font-label text-sm md:text-base leading-relaxed h-[500px] overflow-y-auto custom-scrollbar" id="terminal-content"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 3: SYSTEM RADAR DASHBOARD
+       ══════════════════════════════════════════════════ -->
+  <section id="radar" class="py-24 px-6 md:px-20 relative">
+    <div class="grid-overlay absolute inset-0 z-0"></div>
+    <div class="relative z-10">
+      <!-- Section Header -->
+      <div class="mb-12 reveal">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="material-symbols-outlined text-primary">security</span>
+          <span class="font-label text-primary text-xs uppercase tracking-[0.4em]">_SYSTEM_OPERATIONS</span>
+        </div>
+        <h2 class="font-headline text-4xl md:text-5xl font-black uppercase italic">Live Intelligence</h2>
+        <div class="flex items-center gap-2 mt-4">
+          <span class="w-2 h-2 bg-primary animate-pulse"></span>
+          <span class="font-label text-[10px] text-primary tracking-widest">LIVE_FEED_ACTIVE</span>
+        </div>
+      </div>
+
+      <!-- Hero Stats Row — LIVE -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 reveal">
+        <div class="bg-surface-container-low p-6 border-l-2 border-primary red-glow">
+          <p class="font-label text-[10px] text-primary mb-1 tracking-widest uppercase">CVEs + Breaches (7d)</p>
+          <h3 id="stat-threats-24h" class="font-headline text-3xl font-black text-on-surface tracking-tighter">---</h3>
+          <div class="w-full h-1 bg-surface-container-highest mt-4"><div id="stat-threats-bar" class="w-[0%] h-full bg-primary transition-all duration-1000"></div></div>
+        </div>
+        <div class="bg-surface-container-low p-6 border-l-2 border-primary-container">
+          <p class="font-label text-[10px] text-primary-container mb-1 tracking-widest uppercase">Avg API Response</p>
+          <h3 id="stat-response" class="font-headline text-3xl font-black text-on-surface tracking-tighter">--ms</h3>
+          <div class="w-full h-1 bg-surface-container-highest mt-4"><div id="stat-response-bar" class="w-[15%] h-full bg-primary-container transition-all duration-1000"></div></div>
+        </div>
+        <div class="bg-surface-container-low p-6 border-l-2 border-secondary-container">
+          <p class="font-label text-[10px] text-secondary-container mb-1 tracking-widest uppercase">Active Feeds</p>
+          <h3 id="stat-nodes" class="font-headline text-3xl font-black text-on-surface tracking-tighter">---</h3>
+          <div class="flex gap-1 mt-4">
+            <div class="h-1 w-4 bg-primary"></div><div class="h-1 w-4 bg-primary"></div>
+            <div class="h-1 w-4 bg-primary"></div><div class="h-1 w-4 bg-primary/20"></div>
+          </div>
+        </div>
+        <div class="bg-surface-container-low p-6 border-l-2 border-error">
+          <p class="font-label text-[10px] text-error mb-1 tracking-widest uppercase">Breach Records</p>
+          <h3 id="stat-interceptions" class="font-headline text-3xl font-black text-on-surface tracking-tighter">0</h3>
+          <div class="w-full h-1 bg-surface-container-highest mt-4"><div id="stat-intercept-bar" class="w-[2%] h-full bg-error transition-all duration-1000"></div></div>
+        </div>
+      </div>
+
+      <!-- Main Radar Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left: Radar + Logs -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- Radar Visualization — EU LIVE THREAT MAP -->
+          <div class="bg-surface-container-low relative overflow-hidden reveal">
+            <!-- Metadata Overlays -->
+            <div class="absolute top-4 left-4 z-10 font-label text-[10px] text-primary/40 space-y-1">
+              <p>REGION: EU_CENTRAL</p><p>LAT: 50.1109 N</p><p>LONG: 10.4515 E</p>
+            </div>
+            <div class="absolute top-4 right-4 z-10 font-label text-[10px] text-primary text-right">
+              <p class="animate-pulse">_SCANNING_EU_PERIMETER</p>
+              <p class="text-primary/40 mt-1" id="radar-object-count">THREATS: 00 DETECTED</p>
+            </div>
+            <!-- Radar Display -->
+            <div id="radar-display" class="aspect-video w-full bg-surface-container-lowest relative overflow-hidden">
+              <!-- SVG EU Map + Radar Overlay -->
+              <svg id="eu-radar-svg" viewBox="0 0 800 500" class="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <!-- Radar sweep gradient -->
+                  <linearGradient id="sweepGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#ffb4a8" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#ffb4a8" stop-opacity="0"/>
+                  </linearGradient>
+                  <!-- Threat glow filter -->
+                  <filter id="threatGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                  <filter id="nodeGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                  <!-- Ripple animation defs -->
+                  <radialGradient id="rippleGrad">
+                    <stop offset="0%" stop-color="#ff5540" stop-opacity="0.4"/>
+                    <stop offset="100%" stop-color="#ff5540" stop-opacity="0"/>
+                  </radialGradient>
+                  <!-- Radar scan cone gradient -->
+                  <radialGradient id="scanGrad" cx="0.5" cy="0.5" r="0.5">
+                    <stop offset="0%" stop-color="#ffb4a8" stop-opacity="0.06"/>
+                    <stop offset="60%" stop-color="#ffb4a8" stop-opacity="0.03"/>
+                    <stop offset="100%" stop-color="#ffb4a8" stop-opacity="0"/>
+                  </radialGradient>
+                  <clipPath id="mapClip"><rect x="0" y="0" width="800" height="500"/></clipPath>
+                </defs>
+                
+                <!-- Grid lines -->
+                <g opacity="0.06" stroke="#ffb4a8" stroke-width="0.5">
+                  <line x1="0" y1="100" x2="800" y2="100"/><line x1="0" y1="200" x2="800" y2="200"/>
+                  <line x1="0" y1="300" x2="800" y2="300"/><line x1="0" y1="400" x2="800" y2="400"/>
+                  <line x1="160" y1="0" x2="160" y2="500"/><line x1="320" y1="0" x2="320" y2="500"/>
+                  <line x1="480" y1="0" x2="480" y2="500"/><line x1="640" y1="0" x2="640" y2="500"/>
+                </g>
+
+                <!-- EU Country Outlines (GISCO/Eurostat EPSG:3035 projection) -->
+                <g id="eu-countries" fill="none" stroke="#ffb4a8" stroke-width="0.7">
+<path id="c-AL" d="M421.5,383.2L422.8,385.1L424.8,383.7L426.7,386.1L428.8,386.8L430,389.6L430.2,391.5L430.5,394.6L430.8,396.6L430.7,398.6L431.6,400.3L433.1,402.2L435.3,402.1L436.4,405.2L435.7,406.9L434.4,408.7L433.3,412.1L431.5,413L431.7,415.8L430.3,417.6L428.4,417.4L427.9,415.5L426.7,413.8L422,411L420.8,407L421.5,402.7L421.8,399.5L421.7,395.8L421.7,393.5L419.7,392.9L419.5,391L418.6,388.9L419.4,387.1L421.5,383.2Z" opacity="0.10"/><!-- Albania -->
+                  <path id="c-AT" d="M381.6,313.4L385.9,314.5L387.9,313.4L390.6,314.3L391.3,316.3L390.6,318.2L391.9,320.6L393.5,322.4L392.8,326L389.1,326.1L390.2,327.9L389.2,329.9L388.9,334.5L386.3,336.6L385.9,338.8L383.8,338.7L382,339.3L380.2,339.6L378.1,339.9L376.1,341.2L374.1,343.4L371.4,342.8L369.5,342.4L367,342L358.9,341L356.9,340.6L354.2,337.8L354.8,336L350.8,337.1L346.1,337.4L345,339.6L343.2,339.7L340.5,338.8L337.8,338.9L335.9,337.9L333.5,336.4L333.1,334.3L333.9,332.3L336.4,330.6L338.3,332.9L340.1,332.4L340.3,330.5L343.1,330.9L344.6,332.4L348.1,331.7L349.7,329.9L353.2,329.5L355.4,328.5L357.3,329.3L360,330.7L361.3,328.7L360.5,326.5L359.4,324.9L360,322.3L361.8,321.2L363.6,320.1L363.7,318.1L366,318.4L366.4,316L369,317.3L370.8,317.6L373.5,317.2L374.4,315L375.7,312.1L379.9,312.9L381.6,313.4Z" opacity="0.22"/><!-- Austria -->
+                  <path id="c-BA" d="M394.8,355.2L396.5,356L401.1,356L403.9,355.5L406,355.5L407.8,356L409.7,356.1L411,357.9L413.8,357.1L415.1,359.4L414.1,361.9L414.2,363.8L417.6,366.3L416.1,368.1L418,370.6L416.1,373.3L414,373.5L415,376.2L412.1,376.9L411.8,379.4L410.6,381.9L411.6,384.2L409.5,384.9L405.2,382.5L403.3,382.3L401.3,379.1L400,377.8L399.3,375.9L397.1,374.8L392.7,370.4L389.3,367.9L388.7,365.1L387.5,362.8L385.4,361.5L384.9,359.7L385.6,356.2L389.5,358.6L391.4,355.7L393.6,355.9L394.8,355.2Z" opacity="0.10"/><!-- Bosnia and Herzegovina -->
+                  <path id="c-BE" d="M297.9,282.3L299.9,282.9L301.2,285.4L303.1,285.3L305.2,286.9L305,288.7L304.3,291L306.7,291.8L307.9,293.2L308.8,295L309.4,297L307.7,298.1L305.4,299.5L304,302.3L305,304.6L303.7,306L301.7,306.4L299.4,303.7L297.3,302.4L297,300.4L297.6,298.7L295.9,300.1L294.1,300.6L291.9,300L292.2,297.8L291.5,295.7L288.9,295.6L288.4,293.6L286.2,293.1L285.4,290.2L283,290.5L281.5,289L281.1,285.8L284.8,284L287.5,283.1L289.3,284.1L290.9,285.3L293.9,283.9L295.9,282.6L297.9,282.3Z" opacity="0.22"/><!-- Belgium -->
+                  <path id="c-BG" d="M446.4,364.3L451.2,364.1L453.1,364.4L457.4,364.7L459.2,364.4L461.9,363.6L467.5,363.2L469.6,363L473.6,358.2L475.5,356.9L478.2,355.8L480.1,354.6L482.8,354.1L486.7,354.9L488.6,354.4L490.7,356.2L494.7,355.9L495.4,358.5L491.8,361L490.9,363.8L491.3,367.8L489.1,372.6L494.8,377.4L492.8,378.2L490.9,379L487.9,377.8L485.6,379.4L482.6,380.8L480.9,382.8L478.7,384.5L480,387.5L478.4,389.2L472.2,391.2L468.9,390.3L465.4,389.1L461.4,390.2L457.9,392.6L451.8,394.1L451.9,391.9L451.9,389.9L450.6,387.9L450,386.2L448.1,386L445.1,383.6L446.4,381.8L445.4,379.5L444.9,377.5L447.4,376.3L449,372.4L446.4,370.5L444.5,369.7L443.2,367.5L442.5,364L444.3,360.9L446.9,361.8L446.4,364.3Z" opacity="0.22"/><!-- Bulgaria -->
+                  <path id="c-BY" d="M455.5,213.2L458.7,213.4L460.2,214.6L461.7,213.3L463.9,213.5L464.5,215.5L467.7,213.9L469.7,213.2L471.5,213.4L473.6,214.9L475.6,216.3L475.5,218.4L477.5,220.8L477,224L479.3,225.2L480.1,227L482.7,229.6L486.5,230.6L487.1,233.5L489.3,232.7L491.2,232.9L492.4,234.8L494.4,235.4L492.2,240.7L490.4,241.3L487.8,240.7L486.7,242.5L489,245.4L491.1,250.9L493,252.8L490.3,253.4L488.4,254.5L485.9,260.9L487.5,263.9L483.9,263.2L481.5,264.5L478.4,266.1L475.8,263.8L474.2,265.1L472.4,265.5L470.7,266.1L468.4,266.5L466.6,267.9L464.5,266.7L461.5,265.8L459.7,266.5L457.3,266.3L453.1,265.8L450,266.5L447.1,266.6L445.6,267.7L441.5,268.9L441.1,270.7L439.4,272.8L437.5,272.3L436.7,274.3L435.8,272L435.9,268L434.3,266.7L431.9,265.8L433.1,262.8L435.6,260.8L436.2,259L435,254.6L431.7,248.8L430.6,245.8L432.8,245.4L435.3,244.7L438.1,243.8L439.2,241.8L441.6,240L443.2,239.1L444.1,240.7L445,239.1L443.8,236.8L443.6,232.6L446.2,229.9L448.7,227.3L448.8,225.5L447,223.6L447.1,221.3L449.6,218.7L452.9,218.5L455.5,213.2Z" opacity="0.10"/><!-- Belarus -->
+                  <path id="c-FR" d="M332.1,386L331.9,388.2L332.7,394.1L332,396.1L331.3,397.9L330.9,401.2L329.5,403.4L326.3,401.6L325.3,399.1L325.8,397.3L325.2,395.4L324.8,392.9L325.1,389.9L329.2,387.6L330.8,386L332.1,386Z M281.5,289L283,290.5L284.8,289.9L286.2,293.1L288.4,293.6L288.9,295.6L291.4,295.5L292.2,297.8L291.9,300L294.1,300.6L295.9,300.1L297,298.4L297,300.4L297.3,302.4L299.4,303.7L301.2,305L303.7,306L308.6,307.1L311.2,310.2L314.1,311.1L316.2,311.1L318.2,312.5L320.4,312.6L322.8,313.6L320.6,316.5L318.7,320.5L317.4,323.5L317.6,325.3L317,328L317.3,329.8L315.6,331.6L313.6,330.7L312,332.1L311.2,334.6L307.9,337.2L307.4,339.3L305.1,341.5L304.4,343.2L303.3,346.5L305.5,345.8L308,342.9L310.6,343.3L310.4,346.5L312.2,349.4L310.1,351L311.5,352.8L312.5,354.8L312.3,357.6L308.3,358.8L309.4,361.4L311.2,362.2L310.8,364.3L310.1,367.8L311.2,369.3L313.7,370.5L316.7,370.4L315.4,373.5L314.6,375.2L312.4,376.2L310.1,378.2L308.5,379.1L307.5,381.6L304.8,382.4L301.1,382.1L299,381.2L296.4,380.6L294,379.1L292.6,377.9L290.2,378.5L286.8,377.1L279.8,378.5L278,379.2L276.5,381.1L276,383.3L275.7,386.5L276.7,388.4L274.1,387.8L271.1,388.9L268.5,387.6L266.6,388.2L264.1,386.4L262.6,384.5L261,383.5L256.9,381.6L255.1,383.1L249.4,382.2L246.8,380L244.7,380.3L243.4,378.7L241.7,377.6L237.8,376.1L237.8,373.9L235.4,373L237.5,370.5L240.1,364.1L241.4,359.9L242.9,357.5L244.1,348.1L245.6,349.1L247.3,350.4L245.9,347.6L243.9,345.5L243,342.1L244.3,343.9L245.4,341.7L244.8,339.9L246,338.4L240.7,335.7L239.5,333.1L238.4,330.6L240,328.9L238.7,327.4L236.5,325.1L236.3,322.3L231.9,320.6L229.8,318.9L222.9,315.5L222,313.6L222.8,310.8L221.5,308.5L222.7,307.1L225.5,306.5L230,307.5L231.5,306L234.4,306L237.1,310.2L240,309.3L241.8,310.3L244.6,310.6L246.5,310.9L246.3,308.5L246.8,306.5L246.8,304L245.6,300.6L245.4,297.6L247.7,298.6L249.9,298.5L249.9,300.4L250.8,303.1L253.3,303.1L257.7,304.5L261.2,303.6L263.5,303L261.3,303L261.7,299.9L264.7,298.7L268.6,298.2L271,296.9L272.9,295.4L272.9,292.8L273.7,287.7L277.4,286.4L281.1,285.8L281.3,287.9L281.5,289Z" opacity="0.22"/><!-- France -->
+                  <path id="c-GE" d="M602.1,324.3L605.3,323.3L608.1,321.2L610.3,321.6L612.2,320.6L615.3,321.8L617.4,321.5L621.1,321.8L623.3,323.1L625.5,319.9L628,318.1L629.7,318.9L631.3,317L634.2,317.7L637.8,316.6L638.2,320.2L641.5,320.7L645.7,320.2L644.9,322.8L647.4,324.9L650.9,325.4L651.3,327.8L648,328.7L645.3,330L642.9,329.2L639.5,329.6L637.9,332.6L636.5,334.2L631.8,336.5L628.6,339.6L626.5,340.6L624.3,340.8L619.5,338.9L617.5,339L617.4,340.8L614.2,341.5L612.4,342.3L609.8,343.5L609.6,339.8L608.6,337.5L603.1,330.7L599.6,330.4L596.9,328.9L592.1,329.7L590.6,328.4L588.6,328.2L589,325.7L593.6,324.3L596.2,324.6L599.7,323.9L602.1,324.3Z" opacity="0.10"/><!-- Georgia -->
+                  <path id="c-CH" d="M326,328.9L330.1,329.3L332.7,330.6L333.9,332.3L332.8,333.9L332.7,336.1L335.2,336.7L337.8,338.9L339.8,337.3L339.9,340.9L337.3,342.2L337.7,344.2L337.4,346.1L335.9,344.6L334.1,345.4L332,343.2L330.4,346.1L328.5,348.7L328.8,350.5L326.8,348.9L324,345.8L324,343.8L321.3,345.5L319.1,349.5L316.7,348.9L313.1,350.1L310.4,346.5L310.6,343.3L308,342.9L305.6,344.5L303.3,346.5L304.8,344.4L305.1,341.5L307.4,339.3L307.9,337.2L311.2,334.6L312.6,332.7L313.6,330.7L315.6,331.6L317,330.1L319.7,329.9L322.4,329.7L325.5,329.1L326,328.9Z" opacity="0.10"/><!-- Switzerland -->
+                  <path id="c-CY" d="M568.2,436.8L567.1,438.8L567.4,441L569.4,442.2L560.6,449.3L554.7,449.3L553.1,447.9L552,446.2L556.4,443.5L558.5,440.7L562.7,439.8L565.9,437.8L571.7,432.4L570.3,434.8L568.2,436.8Z" opacity="0.22"/><!-- Cyprus -->
+                  <path id="c-CZ" d="M371.3,290.3L373.9,289.9L375.8,288.5L377,290.6L380.3,291L382.1,292.2L385,292.3L383.9,294.4L386,296.3L387.8,297.8L389.7,295.8L388.7,294.3L393,295.7L395.2,295.1L394.9,296.9L396.5,298.5L400.2,298.8L402.1,298.8L402.6,300.6L404.2,301.5L404.8,303.2L402.7,303.6L401.5,305L399.9,306.8L399.4,309.4L396.4,312L394.5,312.7L392.7,312.4L391.1,315.4L387.9,313.4L385.9,314.5L381.6,313.4L375.7,312.1L375.4,314.5L373.5,317.2L370.8,317.6L369,317.3L366.7,315.3L364.4,313.1L361.3,310.8L359.8,309.1L357,307.4L355.1,304.1L356.2,302.3L353.9,300.6L353.1,298.7L354.9,297.5L357.9,295.8L359.7,295.2L363,293.4L365.4,292.1L369.3,289.9L368.9,288.1L370.9,288.8L371.3,290.3Z" opacity="0.22"/><!-- Czechia -->
+                  <path id="c-DE" d="M330.6,243.7L332.7,244.2L336.3,245L336.5,248.4L337.8,250L341.7,250.4L344.1,250.4L342.1,253.3L344.6,254L346.8,255.2L348.3,252.3L350.5,251.8L352.5,250.6L354.4,248.6L357.4,249L359.4,246.5L361.7,246.7L361.6,249.3L359.7,251.3L362.7,251.8L364.4,253.5L366.2,254.1L364.9,255.7L366.7,256.8L368,261.1L367.7,264.2L366.3,265.6L368.6,268.8L370.1,270.6L370.1,273.5L371.4,275.9L370.5,278.8L371.6,280.7L373.1,282.9L374,285.1L372.8,290L370.9,288.8L368.9,288.1L369.3,289.9L365.4,292.1L363,293.4L359.7,295.2L357.9,295.8L356.2,296.4L354.3,299.1L353.1,297.6L353.9,300.6L356.2,302.3L355.1,304.1L356.6,306.6L358.3,308.7L361.3,310.8L363.3,313L366.7,315.3L366.6,317.2L364.3,317.6L363.6,320.1L361.8,321.2L360,322.3L358.5,323.5L359.5,325.3L360.1,327.9L361.1,330.4L358.2,328.6L355.4,328.5L353.2,329.5L349.7,329.9L348,331.1L344.8,332.3L343.8,330.7L340.3,330.5L340.1,332.4L338.1,333.9L336.6,331.4L333.1,330.7L330.1,329.3L327.6,329.3L325.6,327.5L324.1,329L322.4,329.7L320.7,330.3L318.3,330.4L317,328L317.6,325.3L317.4,323.5L318.3,321.9L319.5,317.8L322.8,313.6L320.4,312.6L318.2,312.5L316.2,311.1L314.1,311.1L311.6,310.9L310,307.8L308.7,306.2L309.7,304.1L308.3,302.5L307.1,300.6L307.7,298.1L309.4,297L308.8,295L307.9,293.2L306.7,291.8L307.3,289.9L305.8,288.4L308.1,286.8L308.6,284.6L308.5,282.8L306.9,280L308.5,278.3L310.2,279.2L313,278.1L313,275.9L315.3,274.5L314.9,272.1L312.7,271.5L315,269.8L315.8,267.5L316.7,264.2L317.5,261.8L315.6,261.5L315.8,259.6L317,257.9L319.4,257.7L321.2,257.3L323.2,258.2L323.8,261L324.6,258.7L326.4,259.7L326.2,257L327.2,255.4L329.8,256.1L332.4,257.1L333.6,258.8L331,255.4L328.9,254.6L328.5,252.1L327.6,250.1L328.8,247.2L327.4,244.2L330.6,243.7Z M345.4,248.9L343.5,248.5L345.4,248.9Z" opacity="0.22"/><!-- Germany -->
+                  <path id="c-DK" d="M371.5,240.8L369.1,240.5L368.6,238.6L371.7,239.5L371.5,240.8Z M354,233.4L353.9,235.2L351.7,235.8L352.7,238.2L351.4,239.8L352.6,242.6L350.3,246.1L346.9,246.5L344.2,244.9L344.4,243.1L347.3,243.7L349.2,242.2L348.2,240.6L344.9,238.8L344,233.9L347.6,231.1L348.6,234.3L349.6,231.9L351.7,228.7L353.9,229.5L353.9,232.3L354,233.4Z M340,215.5L338.6,219.2L338.5,221.7L339,223.7L341.4,224L342.8,225.7L341.5,228.5L339.1,228.1L338.4,230.7L336.3,234L334.4,233.8L334,237.5L334.6,239.5L333.7,241.8L335.5,241.6L336.9,243.6L334.7,244L332.7,244.2L330.6,243.7L327.3,243.2L327.7,240.2L327.2,237.1L325.2,235.4L324.4,232.4L325.6,231L324.2,228.4L324.7,225.7L324.4,223.6L326.8,223.7L328.5,222.6L330.1,220.6L330.8,223.4L331.5,220.8L331.5,218.9L329.1,221.1L326.1,221.9L326.1,218.8L327.4,217.3L332.7,216.5L336.2,211.8L339.7,210.3L340,215.5Z M338.3,235L340.1,236.3L342,238.5L341.9,240.8L340.7,242.6L337.7,241.6L336.3,239.8L334.7,236.2L338.3,235Z M342,244.1L341.3,246.3L339.6,245.3L342,244.1Z" opacity="0.22"/><!-- Denmark -->
+                  <path id="c-EE" d="M430.5,176.9L432.4,176.7L435.2,177.1L438.3,177.4L443.7,176.5L445.7,176.6L444.4,179.3L444.3,181.5L443.3,183.1L444.8,188.5L445.1,190.4L446.9,192.8L447.6,194.5L446.2,197.2L446.4,199L443.4,198.4L441.4,200L439.5,199.5L437.2,197.1L432.4,195.7L426.8,199L427.1,196.9L426.8,193.3L424.5,195.2L421.9,194.1L420,191.4L420.3,189.6L418.9,188.2L418.5,186.4L418.6,184.5L420.7,182.2L423.3,180.5L425.3,180L429.1,178.7L430.5,176.9Z M413.8,198L412.8,200L409.9,196.2L414.1,192.5L417.8,191.5L417.3,194.9L413.8,198Z M415,190.1L413.4,191.2L411.3,189.7L413.6,187L415.6,188L415,190.1Z" opacity="0.22"/><!-- Estonia -->
+                  <path id="c-EL" d="M510,445.4L507.7,448.2L506.6,445.3L507.9,442.8L510.7,441.2L510,445.4Z M502.6,451.9L502.9,455L501.1,453.1L502.6,451.9Z M500.8,437.8L498.4,439.2L499.7,437.8L500.8,437.8Z M496.1,428.9L494.6,430.3L492.1,429.4L494,428L496.1,428.9Z M469.9,458.9L474,459.1L475.9,461.4L481.7,459.6L487.3,459.8L489.2,459L490.4,461.3L494.5,458.8L495.1,460.9L488.5,463.3L483,465L481.1,465.3L476,463.5L469.4,464L468.5,460.7L469.9,458.9Z M489.6,431.6L487,432.4L489.6,431.6Z M489.2,414.6L486.2,415.6L481.9,413.9L484.4,411.5L488,412.7L489.2,414.6Z M488.6,440.1L488,441.9L488.6,440.1Z M487,423.6L486.1,425.7L485.3,423.5L483.5,421.6L486.4,421L487,423.6Z M484.5,440.2L482.2,439.6L483.5,437.7L484.5,440.2Z M482.5,388.9L482.3,391L482.3,393.1L480.7,396L476.6,395.1L472,394.5L469.4,396.6L466.4,396.2L463.5,399.2L461.2,399.2L460.5,401L461.9,403L465,403.8L467,405.6L464.9,404.6L462.3,403.9L460.8,405.3L463.6,406.9L461.7,407.2L460.1,406L458.2,405.9L454.3,405.5L453.6,403.1L451.1,403.9L451.1,406L450.9,409.1L452.3,410.6L454,412.2L454.9,414.4L456.7,415.3L459.3,418L457.4,417.7L454.8,418.5L456.9,421.2L455.1,423.5L459.4,424.9L460.7,426.3L457.6,422.5L459.4,421L462.8,422.9L467.6,423.8L469.8,427.6L472.1,428.8L472,430.6L467.1,427L464,427.7L467.9,428.7L468.1,431.2L469,433.8L468,435.3L465.8,433.4L463.5,433.2L460.9,432.8L459.4,434.1L460.2,435.9L462.3,437.6L464.2,438.3L462.5,439.5L461.1,440.8L457.1,438.3L458.2,441.3L460.1,444L461.5,446.7L461.3,448.5L462.7,450.1L457.9,447.3L456.4,451.7L454.3,448.2L451.7,445.6L450.5,449.1L448.7,448.7L446.8,445.6L447.2,443.7L445.7,440.3L441.6,437.4L443.1,434.2L445.6,433.2L447.4,430.8L449.7,431.3L452.5,432.2L456.5,433.3L458.3,433.5L459.6,432L457.6,430.8L454.3,429.3L452,429.9L449.5,430L447.3,430.3L444.2,431.5L441.1,432L439.2,428.7L437.6,427L439.5,425.3L439.4,423.5L436.6,423.7L433.3,421.7L429.9,418.1L431,416.6L431,413.9L433.3,412.1L434.4,408.7L435.7,406.9L436.4,405.2L435.4,402.5L437.7,402L440,401.2L442.5,400.6L443.3,398.6L445.9,397.1L449.4,397.1L450.5,395.5L451.8,394.1L457.9,392.6L461.2,391L465.4,389.1L468.1,390.8L471.7,390.7L478,389.4L479.7,388.4L478.7,384.5L481,383.9L483.2,384.7L483.9,386.7L482.5,388.9Z M481.7,439.3L479.3,440.6L481.7,439.3Z M480.6,433.8L478.2,434.1L480.6,433.8Z M478.4,399.9L476,400L478.4,399.9Z M477.2,431.6L474.9,431.5L477.2,431.6Z M476.8,405.8L476.3,408L473.8,407.9L474.5,405.9L476.8,405.8Z M475.3,445.4L472.9,445.9L475.3,445.4Z M472.5,421L469.9,420.3L472.5,421Z M472.3,434.3L471.7,436.2L471.3,434.4L472.3,434.3Z M469.6,399.7L467,399.5L468.1,397.5L469.6,398.7L469.6,399.7Z M465.2,416.3L464,417.7L465.2,416.3Z M462.3,453L460.4,452.5L462.3,453Z M460.1,409.1L456.7,408L458.6,407.4L460.1,409.1Z M439.5,439.1L436.3,437.9L439.5,439.1Z M435.4,431.9L437.8,434.9L435.7,435.1L433.6,434.3L435.4,431.9Z M436.5,431L437.5,432.7L435.5,431L436.5,431Z M436.4,428.8L435.1,427.5L436.4,428.8Z M427.2,416.4L428.3,420.2L424.5,416.9L427.2,416.4Z" opacity="0.22"/><!-- Greece -->
+                  <path id="c-ES" d="M284.4,418.3L281.1,419.1L279.1,417.5L282.9,416.6L284.4,418.3Z M189.1,360.5L191,361.3L198.7,362.8L201.2,362.4L204.9,364.3L210.6,367.3L214.3,368.1L217.6,367.7L219.9,367.9L221.8,369.2L223.3,370.3L226.5,370L229.6,371.7L231.8,372.4L235,372.3L237.8,373.9L237.8,376.1L241.7,377.6L243.4,378.7L244.7,380.3L246.8,380L248.3,381.4L253.5,382.7L255.3,382.3L259.7,382.9L261.7,384.8L261.7,386.7L264.1,386.3L266.6,388.2L268.5,387.6L271.1,388.9L274.1,387.8L276.7,388.4L276.1,391.3L276.6,393.4L274.6,395.7L272.4,397.3L267.8,399L265.9,400.8L261.8,401.6L255.6,402.8L253.1,405.1L252.3,407.1L250.8,408.2L247.6,411.9L243.3,416.8L241.6,420.2L242.3,424.2L243.5,426.7L245.5,428.2L238.6,432.7L235.3,438L235,440.7L231.9,440.7L229.7,440.7L226.4,442.3L222.8,446.5L220.6,448.9L218.6,447.5L214.9,448.6L211.3,447.2L208.2,447.2L205.1,446.3L199.2,445.5L196.4,447.4L191.8,447.4L190.4,448.6L189.2,450.2L186.5,451.3L182.7,448.4L181.4,445.4L180.2,442L179.8,438.3L177,435.6L175.4,434.7L172.1,434.2L172,429.9L175.5,425.5L177.8,425L178.9,423.3L176,419.6L177.7,416.4L180.5,413.8L178.7,411.1L178.4,408.1L176.9,405.2L181.6,406L183.5,403L182.8,400.6L184.4,399.6L186.2,392.8L185.6,390.7L188.1,389.1L190.2,388.5L193.2,385.4L190.8,383.9L190.9,380.9L187.4,379.6L185.4,380.3L183.4,380.4L180.8,378.9L177.9,379.2L176.9,377.7L177.5,375L173.8,375.3L171,376.9L171.5,374.1L173.3,372.7L172.8,370.3L174.2,368.2L171.7,368.3L172.1,366.4L171.2,363.7L172.4,361.6L175.2,360.4L179.7,360.6L182.1,358.1L185.9,357.8L187.8,358.5L189.1,360.5Z M276.4,420.8L274.5,424.1L272.7,425.3L270.2,424L269.3,422.2L267.5,422.4L266.2,421.1L272.2,417.9L274.2,418.3L276.4,420.5L276.4,420.8Z M259,426.4L256.7,428.9L254.8,427.3L257,426L259,426.4Z M91.8,511.6L88.3,512.3L89,510L91.7,509.7L91.8,511.6Z M85.2,518.4L81.4,519.4L85.7,513.7L87,515.6L85.2,518.4Z M68.7,518.7L66.6,518.8L65.1,517.1L67.1,514L69.7,515.2L69.8,517.3L68.7,518.7Z M59.4,511.4L57.7,512.2L55.4,507.4L59.5,507.8L62,507.1L59.4,511.4Z M53,509.5L51.3,510.1L50,508.5L51.4,507.3L53,509.5Z M48.8,499L47,502.4L45.4,497.9L47.5,497.8L48.8,499Z M43.9,509.8L42.5,511.3L41.1,509.8L43.5,509.3L43.9,509.8Z" opacity="0.22"/><!-- Spain -->
+                  <path id="c-FI" d="M409.1,54.5L412.2,56.8L415.2,57.5L416.7,59.5L416,63.3L416.9,64.9L416.1,66.7L416.9,71.3L418.1,73.9L422,75.7L426.3,79.5L426.5,81.5L425,88.4L427.1,91.5L429.1,93.8L431.9,97L434.2,101.1L432.8,102.5L433.7,105.8L434.9,107.5L434.3,109.4L435.6,112L437.6,112.6L437.9,114.5L438.8,116.1L441,117.1L442.1,119.2L441.7,122.2L444.3,126L448.8,127.6L451.8,130.5L451.6,136L449.3,142.2L448.3,144.9L445.6,152.2L440.8,161L439.8,163.4L435.8,164.9L434.1,166.5L432.3,166L430.6,167.5L429.8,169.8L427.7,169.3L423.3,172.9L420.8,174.2L418.3,176.2L415.3,177.2L413.2,176.5L413.6,174.7L410.5,177.8L409.7,174.3L407.4,172.4L407.8,174.9L406.2,173.6L405.3,171.6L403.5,173.6L402.8,171.8L401.5,167.7L402.3,165.2L401.8,158.5L400,154.7L399.5,151.6L397.3,146.9L397.2,144.7L398,142.1L398.6,139L400.8,137.5L402,135.2L402.8,133.3L403.1,131.5L405.1,130.8L406.4,128.1L407.4,126.5L409.7,121.8L410.5,118.1L412.1,116.8L414,115.3L412.8,113.6L412.1,110.3L410.7,108.8L407.8,108.5L406,107.8L404.7,105.3L403.6,103.6L402.1,102.1L401.7,100.1L402.1,95.6L399.5,92.2L399.7,90L397.9,88.5L397.3,84.4L395.2,81.1L394.3,79.4L390,78.2L387.8,77.1L385.9,75.5L383.6,74.1L381.8,72.5L384,72.3L383.5,70.5L385.9,69.3L387.9,71.3L390.7,75L394.1,75.3L395.7,74.3L396.6,72.6L401.5,74.4L402.3,71.3L403.8,69.2L403,65.9L402.8,60.7L404.2,57.5L406.4,57.1L409.1,54.5Z M411.6,115.9L409.6,115.6L411.6,115.9Z M405.4,174.6L405.9,178L404.5,175.7L405.4,174.6Z M400.3,171.7L401.8,174.4L400.1,172.5L400.3,171.7Z M400.6,175.1L399.8,173.4L400.6,175.1Z M399.6,177.4L397.9,178.2L399.6,177.4Z M397.7,174.2L398.1,176L397.2,174.2L397.7,174.2Z M397.9,139.5L396.1,139.9L396.5,138.1L397.9,139.5Z M395.6,173.7L397,175.5L397,177.4L393.2,177.2L393,175.1L395.6,173.7Z" opacity="0.22"/><!-- Finland -->
+                  <path id="c-MD" d="M476.3,303.6L481.8,305.6L484.6,305.3L487.4,305.9L488.5,307.8L488.7,309.8L489.4,311.9L491.2,313L492.7,315L493.8,316.6L496.1,317L497.5,319.6L498.7,322.1L496.3,322.4L493.8,322.3L492,322.3L490.2,323.3L490.7,326.1L491.6,328.7L490.3,330.8L489,332.9L489.2,334.7L487.5,335.6L485.8,334L484.4,329.5L484.6,326L484,323.1L482.4,321.1L481.3,319L479.4,318.4L478.4,316.9L476.8,315.9L474.8,313.8L473.4,312L472.1,310.1L470.4,308.1L468.5,307.2L468.3,305.3L471.4,305L473.4,303.3L476.3,303.6Z" opacity="0.10"/><!-- Moldova -->
+                  <path id="c-ME" d="M424.8,383.7L422.8,385.1L421.5,383.2L419.4,387.1L418.6,388.9L419.5,391L419.7,392.9L417.9,392L414.8,388.5L412.7,386.8L410.6,385.5L410.6,381.9L411.8,379.4L412.1,376.9L414.6,376.5L414,373.5L416.1,373.3L419.5,376.2L424.1,378.5L426.8,380.2L424.3,381.4L424.9,383.5L424.8,383.7Z" opacity="0.10"/><!-- Montenegro -->
+                  <path id="c-HR" d="M390.6,340.9L392.9,342.2L395.4,344.1L396.9,346.1L399.1,346.6L402.2,347.9L406.6,347.9L408.3,346L410,346.7L410.9,348.8L411.8,350.4L415.2,353.1L412.9,354.7L413.4,356.7L411,357.9L409.7,356.1L407.8,356L406,355.5L403.9,355.5L401.1,356L396.5,356L394.8,355.2L391.4,355.7L389.5,358.6L387,356.4L384.9,359.7L385.4,361.5L387.5,362.8L388.7,365.1L389.4,367.3L392.7,370.4L397.1,374.8L399.3,375.9L400,377.8L401.3,379.1L403.4,380.7L402.2,382.8L399.7,382.1L400.6,380.3L395.6,376.9L391.4,375.7L389.7,376.8L384.3,372.3L382.5,371.4L380.4,367.2L378.5,364.5L377.7,359.1L374.9,359.3L374.4,356.8L372.7,356.2L372.1,357.9L370.1,361.9L366.9,358.2L366.2,355.2L369.4,354.7L373,354L374.6,351.6L376.6,353.6L378.8,353.5L381.3,353.5L380.8,351.7L381.4,349.8L383.5,349L383.8,346.5L383.3,344.5L385.2,343.6L387.5,342.3L388.3,340.5L390.6,340.9Z M410.6,385.5L404.5,383.3L408.7,384.9L410.6,385.5Z M395.1,380.2L393.1,379.9L395.1,380.2Z M395.1,378.1L391.9,378.1L393.4,377.1L395.1,378.1Z M374.3,360.1L374.5,364.1L373,360.7L374.3,360.1Z" opacity="0.22"/><!-- Croatia -->
+                  <path id="c-HU" d="M426.1,311.6L429.2,313.7L432,312.9L434.1,314.1L436.4,315.5L438.8,316.8L437.5,318.9L435.5,319.8L433.8,322L431.7,327.9L429.7,334L428.9,336.8L428,338.4L424.9,339.3L421,341.6L417.7,341.8L415.3,341.9L413.3,344.2L411.1,345.2L408.3,346L406.6,347.9L402.2,347.9L400,347.5L396.9,346.1L395.4,344.1L393.1,342.5L390.6,340.9L388.8,339.1L388,337.3L386.3,336.6L388.9,334.5L388.4,330.7L390,329.4L389,327.2L392.8,326L393.5,322.4L398.1,324.9L407.1,323.2L407.4,320.3L411.5,319.2L412.6,317.5L415,318.3L418,316.1L418.9,313.9L420.4,312.5L423.8,312.6L426.1,311.6Z" opacity="0.22"/><!-- Hungary -->
+                  <path id="c-IE" d="M222.3,225.8L220.4,227.4L217.4,230.4L215.6,230.8L213.9,232.4L214,236.2L215.8,237.8L218.4,237.3L220.1,235.4L221.1,238.1L221.9,240.3L224.3,240.2L223.2,241.7L223.4,244.5L224,247L222.7,249.1L222.9,254L221.5,256.2L220.4,258.3L218.4,260.5L214.4,260.9L210.7,261.2L209,262.4L200.7,264.8L195.3,265L193.3,262.4L191.6,260.5L189.8,258.8L191.6,256.8L190.6,254.9L193.5,254.8L195.9,252.7L198.6,252.5L196.8,251L198.4,249.6L200.7,246.6L202.8,246.6L198.1,243.9L196.4,240.7L199.8,237.5L199.5,235.3L199.2,232.5L201.6,231.6L203.8,232.4L205.2,234.6L208.6,234L212.3,231.8L209.9,229.4L211.7,228L212.5,226.2L217.9,224.8L220.7,224.2L222.3,225.8Z" opacity="0.22"/><!-- Ireland -->
+                  <path id="c-IS" d="M216,84.5L216.5,86.9L218.7,87.4L218.4,89.2L218.9,91.1L218.5,93.3L221.2,97.7L220.8,100.6L220.1,102.7L218,104.7L216.4,105.9L212.5,108.6L210.1,109.6L208.2,108.7L204.6,109.2L199.8,111.4L195.1,110.4L191.4,112L188.1,111.6L186,110.7L181.6,106.8L178.6,101.1L174.7,99.6L172.9,98.7L172.2,96.3L175.3,97.1L177.5,96.2L180.7,95.2L178.2,94.2L177.7,89L174.9,86.3L172.5,86L171.9,83.6L173.5,84.6L178.8,85.2L182.4,82.9L182.2,80.4L176.1,78.4L175.3,76.2L177.1,75.2L179.8,73.2L181.5,72.1L184.7,75.5L185.6,71.2L187.9,72.2L189.2,77.6L188.8,79.5L187.5,82.1L187.5,85.2L189.9,83.6L192.3,83.2L194.1,80.5L196,83.1L199.1,81.8L201.6,81.8L202.8,86.1L203.7,84.1L207,85.5L209.1,84.8L211.5,85.1L213.6,82.9L216,84.5Z" opacity="0.10"/><!-- Iceland -->
+                  <path id="c-GB" d="M255.9,192.3L255.2,194.2L253.6,195.8L248.4,199.3L247.5,201.5L247,203.3L249.5,202.6L252.3,202.2L255.7,203L260.1,203.8L261.5,206.8L260.2,208.3L258.9,210.9L257.3,213.4L255,216.3L252.7,217.2L250.7,217.6L252.5,217.6L253.6,219.8L250,221L247.7,221.8L246,220.7L247.9,222.1L249.6,222.9L252.4,222.2L254.7,223.9L256.6,225.9L258.7,229.4L258.8,234.8L259.3,236.8L259.8,239.5L261.6,241.5L264,243.5L265.8,247.2L265.6,249.5L266.7,252.3L264.8,252.2L262.1,251.9L264.3,252.4L266.3,254.9L267.5,256.6L268.1,258.7L266.9,260.9L266.6,263.1L269.3,261.9L272.5,262.3L274.7,263.3L276.8,265.6L277,268.1L275.1,273.2L273.3,274.6L271.3,274.4L272.5,275.8L270.6,275.9L269,278L266.7,278.8L267.3,280.8L269.6,281.4L272.9,281.3L272.7,283.7L269.7,285.1L268.3,286.3L263.5,287.8L261.5,286.9L255.7,287L254.2,285.4L251.8,284.5L249.9,286.1L247.1,285.7L245.8,287.1L243,286.4L239.7,284.4L237.3,284.6L235.2,286L233,289.3L230.2,287.1L225.9,286.3L222.8,288.1L221.5,289.8L219.8,287.8L217.9,287.8L222.1,285.8L224.2,283.5L226.7,282.3L228.2,280.4L230.7,279L231.7,277.1L235.2,277.4L237.8,278.4L240,278.4L241.1,276.6L243.1,275.6L244.7,273.7L242.4,274.8L240.4,275.1L238.2,276L236.4,274.6L234.8,272.6L232.3,273L233.6,271.6L231.4,270.3L228.8,270.8L226.6,270.8L226.2,268.3L230.2,266L233.9,264.6L235.7,261.9L235.3,257.7L233.4,256.6L235.8,254.3L237.7,253.4L241.3,253.5L243.8,254.2L246.6,254.3L245,252.9L244.8,250.8L246.7,249.2L245.7,247.4L247.8,244.1L245.5,244.7L243.4,238.9L245.7,235.3L247.5,234.9L245.3,234.1L241.5,235.5L239,234.1L238.3,235.8L235.6,233.7L233.9,232.6L235.3,230.4L237,228L238.6,226.7L237.9,224.2L238,221.6L240,221.3L238.4,220.1L237,222.2L235.3,220.9L233.8,223.2L232.4,226.8L232.9,222.1L234.8,215.5L235.9,213.6L231.9,210.2L234.1,209.4L234.7,207.6L235.8,205.7L232.6,204.8L231.6,202.1L230.6,200.6L232.7,200.4L233.7,198.7L234.2,202.2L235.3,203.8L236.9,204.7L236.2,202.9L237,200.7L237.6,197.6L240.8,197.8L240.5,195.4L241.3,193.7L243.6,190.6L248.7,191.4L254.5,191.2L255.9,192.3Z M274,168.8L273.5,171.1L271.5,172.3L270.8,175.4L269.3,179L269.4,175.5L267.9,174.2L269.4,173.1L269.7,170.9L272.1,169.4L274,168.8Z M257.5,185.8L258,188.5L255.8,187.9L255.6,186.1L257.5,185.8Z M253.5,287.3L251.9,288.2L250.2,286.6L252,285.8L253.5,287.3Z M237.3,252.9L234.9,254.3L233.8,251.6L235.5,250.8L237.3,252.9Z M234.2,194.5L230.2,196.8L230.5,195L230.1,192.5L235.8,189.4L235,192.5L234.2,194.5Z M235.8,226.2L233.9,223.7L235.7,223.1L235.8,226.2Z M233.3,215.2L230.4,214.7L230.5,211.9L234.5,214.2L233.3,215.2Z M231.2,219.7L228.6,223.1L226.2,220.8L228.8,219.2L231.2,219.7Z M228.8,229.5L229.9,233L228.1,234.4L230.6,235.2L230.4,237.9L227.4,239.4L225.8,241.2L224.3,240.2L221.9,240.3L221.1,238.1L220.1,235.4L218.4,237.3L215.8,237.8L214,236.2L212.7,233.3L216.1,232L217.4,230.4L219.4,227.9L221.6,227.9L226.1,226.6L227.9,227.4L228.8,229.5Z M226.3,203.8L226.6,199.2L228.6,196.9L227.5,200.4L226.5,203.1L226.3,203.8Z" opacity="0.15"/><!-- United Kingdom -->
+                  <path id="c-IT" d="M354,336.9L356.9,340.6L358.9,341L365.3,341.6L366.8,343L364.6,344.7L366.6,345.9L365.5,347.6L366.5,349.3L369.1,352.3L366.3,350.7L362.7,351.2L357.7,354.6L354.5,357L356.2,358.6L357.4,361.2L355.9,362.8L355.9,364.9L356.8,369.1L360.2,372.5L363.9,375L367.3,376.6L369.1,380.1L370.1,382.8L370.8,384.8L373,388.9L378.9,394L382.2,395.5L391,395L389.3,399L390.5,400.8L394.3,402.3L400.4,404.3L403.2,406L408.8,408.3L410,409.8L413.3,412.3L414.1,414.1L412.9,417.9L410.5,416.8L408.5,413.2L404.6,412.8L401.1,410.8L399,412.3L397.2,415.7L396.3,419.6L401.3,422.9L402.6,427.3L402.5,429.6L400.6,429.5L398.1,431.2L397.9,433.5L397.9,435.9L395,438.8L393.8,441.8L390.8,442.1L389.7,438.9L391.1,437.6L392,435.2L391.3,433.5L393.8,432.4L394.3,430.3L393.1,428.7L392.2,424.9L390.4,422.3L389.3,418.7L387.3,417.2L385.4,417.9L383.7,416.4L381.8,415.7L381.9,413.4L380,410.7L377.1,411.3L376.3,409.6L373.7,409L370.4,404.5L366.1,403.9L364.1,404.6L361.4,402.6L356.6,398.9L355.4,396.8L353.8,395.9L352,394.2L349.4,391.6L346.8,391.4L346.5,389.5L343.6,386.8L342.8,385.1L341.1,381.4L339.2,377.5L338.9,374.8L337.9,372.9L334.9,371.7L332.5,370L328.8,368.2L326.2,367.6L321.9,370.9L320.6,373.1L319.1,374.1L315.4,374.8L317.1,371.6L313.7,370.5L311.2,369.3L310.1,367.8L310.8,364.3L311.2,362.2L309.4,361.4L308.3,358.8L312.3,357.6L312.9,355.6L311.7,354.2L310.1,351L312.2,349.4L316.7,348.9L319,349.7L321.3,347L323.4,343.4L324,345.8L326,347.7L327.6,349.8L329.7,346.9L330.6,343.5L332.9,345.2L335.9,344.6L337.4,346.1L337.7,344.2L337.3,342.2L340.3,342.6L340.5,338.8L343.2,339.7L345,339.6L346.1,337.4L349.8,336.8L353.9,335.9L354,336.9Z M388.7,439.7L386.3,443.9L385,447.9L386.6,450.4L387.2,452.9L385.7,455.2L385.7,457.2L380,456.3L378.1,453.9L375.2,452.8L371,451.3L364.1,447.8L362.2,447.9L360.6,446.8L359.7,444.2L360.5,442.5L362.6,441L364.7,442.3L365.8,440.7L367.6,440.2L371.8,442.7L376.1,442L379.1,441.6L382.6,439.7L384.7,440.2L388.9,438.1L388.7,439.7Z M383.3,436.2L381.2,435.1L383.3,436.2Z M340.4,386.1L338.5,387.4L340.4,386.1Z M334.1,409.4L334.4,412L334.9,414.1L333.4,416.9L334.1,419.1L333.4,425.1L332.6,429.5L329.8,429L327.5,431.4L323.9,432.5L322.9,430.9L321.9,425.9L322.9,423L323.2,421.2L322.6,419L322.7,416.6L322.1,414.8L321.3,412.9L320.5,409.5L323.7,409.8L325.8,408.6L329.6,405.1L331.8,405.2L333.1,409.1L334.1,409.4Z" opacity="0.22"/><!-- Italy -->
+                  <path id="c-LI" d="M333.6,335.7L332.8,333.9L333.6,335.7Z" opacity="0.10"/><!-- Liechtenstein -->
+                  <path id="c-LT" d="M433.8,215.2L436.3,217.7L439.5,217.6L442.6,219.1L445.3,221.3L447.1,221.3L447,223.6L448.8,225.5L448.7,227.3L446.3,228.3L444.2,231.1L444.2,235.3L443.7,238.4L445.4,240.2L443.2,239.1L441.6,240L439.2,241.8L439,243.8L436.7,245.3L432.8,245.4L430.6,245.8L430.1,243.8L428.6,242.6L426.2,241.5L423.7,239.8L423.8,237.8L421.9,233.9L419.8,234.4L415.4,233.7L413.4,232.9L412.2,230.8L411.2,228.9L410.2,226.4L409.8,223.9L412.5,220.7L415.2,219.2L418,218.5L421.2,218L424,217.8L428.1,217.5L431.7,217.5L433.8,215.2Z" opacity="0.22"/><!-- Lithuania -->
+                  <path id="c-LU" d="M304,302.3L305.4,299.5L307.2,299.2L308.3,302.5L309.7,304.1L308.7,306.2L304.9,306.6L305,304.6L304,302.3Z" opacity="0.22"/><!-- Luxembourg -->
+                  <path id="c-LV" d="M439.5,199.5L441.4,200L443.4,198.4L446.4,199L448.9,200.1L450.4,206.1L454,208.8L455.5,211.8L453.1,216.8L449.6,218.7L448.2,220.9L445.3,221.3L442.6,219.1L440.8,218.2L436.3,217.7L433.8,215.2L431.7,217.5L429.5,218.2L424,217.8L422.5,218.9L419.4,218.7L415.8,218.6L412.5,220.7L410.7,222.8L409,222L408.6,219L408.5,215L410,212.6L409.8,209.4L411.1,205.9L415.2,203.1L417.2,204.7L420.4,206.7L421.9,209.5L424,210.5L426.2,209.8L428.4,207L426.8,199L430.7,196.2L437.2,197.1L439.5,199.5Z" opacity="0.22"/><!-- Latvia -->
+                  <path id="c-RO" d="M473.4,312L474.7,313.8L476.8,315.9L478.4,316.9L479.4,318.4L481.3,319L482.4,321.1L484,323.1L484.6,326L484.1,327.9L485.8,334L487,336.7L488.7,338.2L491.6,338.5L495.3,335.1L498.7,335.1L499.8,341.2L496.7,342.7L495.5,344.2L493.7,349.3L494.7,352.9L494.7,355.9L490.7,356.2L488.6,354.4L486.7,354.9L484.1,355.1L480.1,354.6L478.2,355.8L475.7,356.8L473.6,358.2L470.6,362.2L467.5,363.2L461.9,363.6L459.2,364.4L457.4,364.7L453.1,364.4L451.2,364.1L447.8,365.2L446.6,363.4L444.3,360.9L442.4,358.5L443.7,357L441.3,355.7L439.4,358.3L435,357.1L432.2,355.6L432.2,353.4L432.5,351.1L428.5,350.1L426.6,348.4L426,345.3L421,341.6L424.5,340.7L427.1,339.2L428.9,336.8L428.7,334.8L430.8,329.4L433.4,322.1L434.3,320.4L437.5,318.9L438.8,316.8L440.9,314.8L443.4,315.8L447.1,315.4L449.3,315.5L451.8,314.2L455.1,316.5L457.7,313.7L463.7,311.6L465.1,308.8L467.1,307.4L470.4,308.1L472.1,310.1L473.4,312Z" opacity="0.22"/><!-- Romania -->
+                  <path id="c-RS" d="M421,341.6L424.8,345L426,346.8L428.5,350.1L432.5,351.1L432.2,353.4L432.2,355.6L434.1,356.1L438,357.3L441.3,355.7L443.4,356.4L442.4,358.5L444.3,360.9L443.4,363.1L442.4,366L444.5,369.7L446.4,370.5L449,372.4L447.4,376.3L445.4,376.9L445.4,379.5L446.4,381.8L445.1,383.6L443.1,384L440.1,385L437.4,385.3L436.4,387.4L434.7,386.7L432.9,387.7L431.8,389.3L430.4,391.1L429.5,387.8L427.7,386.3L424.8,383.7L424.3,381.4L426.8,380.2L424.1,378.5L419.5,376.2L416.1,373.3L418.3,371.7L416.1,368.1L418.1,367.3L414.2,363.8L414.1,361.9L415.1,359.4L415.3,357.1L412.6,357.9L412.9,354.7L415.5,353.8L411.8,351.9L412,349.9L410.9,347.6L410,345.5L411.7,344.1L415.3,341.9L417.7,341.8L421,341.6Z" opacity="0.10"/><!-- Serbia -->
+                  <path id="c-MK" d="M445.1,383.6L446.7,385.2L450,386.2L450.6,387.9L451.9,389.9L451.9,391.9L451.8,394.1L450.5,395.5L449.4,397.1L447,397.6L444.8,397.7L442.5,400.6L440,401.2L437.7,402L435.4,402.5L433.1,402.2L431.9,400.3L430.7,398.6L430.8,396.6L430.5,394.6L430.3,392L431.9,390.3L432.9,387.7L434.7,386.7L436.4,387.4L437.3,385.8L439.3,385.4L441.5,384L444.3,383.2L445.1,383.6Z" opacity="0.10"/><!-- North Macedonia -->
+                  <path id="c-NL" d="M316.5,265.9L315,269.8L312.9,269.8L314.9,272.1L315.3,274.5L313,275.9L313,278.1L310.2,279.2L308.5,278.3L306.9,280L308.5,282.8L308.6,284.6L307.4,286L305.8,288.4L307.3,289.9L306.7,291.8L304.8,291.4L305,288.7L305.2,286.9L303.1,285.3L301.2,285.4L300.4,283.4L297.9,282.3L295.9,282.6L294.2,283.6L289.5,281.9L291.2,280.7L291.3,278.8L293,277.8L293.7,276.1L295.7,274L296.7,272.4L297.7,269.6L298.2,267.4L299,263.9L299.6,265.7L302.1,264.8L303.9,263.1L305.5,261.4L309.6,260.4L313.6,260L314.8,261.5L316.8,262.7L316.5,265.9Z M293.9,283.9L291.8,285.2L289.3,284.1L287.5,284.2L293.9,283.9Z" opacity="0.22"/><!-- Netherlands -->
+                  <path id="c-NO" d="M398.2,47.6L397.6,51.4L397.5,54.3L401.1,47.4L402.9,50.6L404.2,47.7L404.2,45L406,43.2L408.1,47.7L409.9,46.3L411.2,44.9L415.5,45.5L419,47.2L419.7,49L416.7,53.3L418.6,54.8L421.8,54.5L422.9,56.9L419.7,56.7L420.1,59L417.6,61.6L417.9,64.1L416,63.3L416.8,60.4L415.2,57.5L412.2,56.8L409.1,54.5L406.4,57.1L404.2,57.5L402.8,60.7L403,65.9L403.8,69.2L402.3,71.3L402.1,73.6L396.6,72.6L395.7,74.3L394.1,75.3L390.7,75L387.9,71.3L385.9,69.3L383.5,70.5L384,72.3L381.8,72.5L381.2,75.4L380.6,78.6L380.5,80.8L373.5,79.4L372.8,83.9L372.2,86.3L369,85.7L367.2,87.9L366.4,91.5L364.9,93.2L366.3,96.5L362.7,104.8L362.9,106.9L361,109.3L358.7,109.7L359.3,113.5L359,116.1L359.1,119.2L358.4,121.7L356,126.7L357.9,130L358.1,131.9L357.5,134.6L353.5,134.1L350.6,135.8L348.2,140.2L347.4,144.2L348.5,147.1L348.3,150.2L349.1,155.2L349.1,158.6L348.9,162.4L350.3,164.1L352.9,166.5L352.1,170.2L349.6,170.9L351.9,176.8L351.3,181.9L349.8,183.8L347.7,184.7L347.3,187.4L347.7,190.7L346.7,195.8L345.4,194.2L343.8,192.9L343.1,194.9L341.8,193.6L341.1,191.1L340.5,187.5L339,188.5L339.6,190.4L339.4,193L336.4,195L333.3,196L331.5,198.1L329.6,201.2L325.9,204.7L321.4,206.7L318.7,205.7L316.8,205.1L315.6,203.6L310,199.4L309,197.3L309.6,194L312.2,194.3L312.8,191.7L311.6,188.4L310,190.1L308.9,191.6L307.4,190.2L308.2,188.2L309.2,185.8L309.2,188L310.2,186.1L312.2,182L310.4,183.2L307.7,185.1L308.1,182.1L310.2,181.2L307.3,178.6L306.8,172.1L307.5,170.3L309.4,168.9L308.2,166.4L308.7,163.6L308.1,160L309.9,157.2L311.4,158.3L312.1,153.8L314.1,153.9L316.5,154.8L316.7,152.9L317.7,150.9L320.5,147.6L324.7,146.3L327.6,148.5L326.9,146L330.3,145L330,142.4L328.2,141.2L329.8,138.1L331.5,140.2L335.1,140.7L336.9,142.7L340.4,141.8L340.6,139.6L337,140.9L335.3,138.2L336.9,136.1L337.7,133.4L339,131.2L341.1,129.3L343.7,127.1L341.2,125.4L343.7,124L346.4,121.9L347.2,120.2L347.3,118.2L349.3,113.7L347.5,111.9L347.8,109.9L350.3,108.6L352.6,101.9L355.9,98.1L357.9,97.1L357.8,95L358.9,93.3L360.7,90.7L358.6,89.6L360,87.7L363.2,85.1L364.5,87L364.7,84.4L366.3,82.2L368.3,82.3L365.6,81.8L363.8,82.5L361.5,83.2L353.4,86.7L353.4,84.7L359.4,81.5L360.3,79.2L360.8,75.4L361.9,73.6L362.3,76.3L362.8,78.4L364,76.8L364.6,74.6L365.1,77.8L367.1,77.3L369.2,76.5L368.8,74.6L366.4,74.4L366.3,70.8L368.9,68.2L372.2,65.4L372.8,61.8L376,62.4L377.1,65L379,63.9L380.1,66.5L380.5,63L379.9,60L382.1,62.3L385.1,61.6L383.4,59L386.9,57L389.6,53.5L391.5,51.8L393.9,48.3L395.8,47.7L396.6,45.5L398.2,47.6Z M387.7,54.4L385.4,55L385.6,52.2L388.5,51.9L387.7,54.4Z M377.2,61.1L375.2,59.5L377.2,61.1Z M360.1,78.6L357.8,81.9L357.1,80.2L357.7,77.9L358.7,75.8L360.1,78.6Z M346.5,116.2L347,113.7L346.5,116.2Z M326.8,142.6L325.1,144.1L326,141.5L326.8,142.6Z" opacity="0.10"/><!-- Norway -->
+                  <path id="c-PL" d="M400.7,246.7L404.2,244.3L406.4,244.3L416.4,243.9L422.3,242.6L424.8,242L428.6,242.6L430.1,243.8L430.6,245.8L431.5,248.2L435,254.6L435.8,257.6L435.6,260.8L433.1,262.8L431.9,265.8L434.3,266.7L435.9,268L436.1,270.9L436.7,274.3L437.9,276.9L440.1,279.3L441.6,281L442.2,283.8L441.9,286.3L440,287.3L439,289.1L437.1,291.7L434.9,296.3L433.9,298.2L435,302.2L436.4,304.6L434,304L430.1,303.1L428.1,301.6L424.4,301.4L422.1,301.9L421.1,303.4L418.4,302.5L415.3,304L414.7,305.7L412.4,305.7L412.1,303.8L409.4,301.4L407.2,304.1L404.8,303.2L404.2,301.5L402.6,300.6L402.1,298.8L400.2,298.8L397.8,297.4L394.9,296.9L395.2,295.1L393,295.7L388.9,293.8L389.7,295.8L387.8,297.8L386,296.3L383.9,294.4L385,292.3L382.6,291.8L380.3,291L378.2,290.7L375.8,288.5L373.9,289.9L373.9,286.8L373.5,284.1L371.6,281.7L370.5,278.8L371.1,276.7L370.8,274L369.5,272.1L369.6,269.4L366.5,267.1L367.7,264.2L368,261.1L366.7,256.8L368.6,256.1L366.2,254.9L374.1,250.8L379.2,248.8L382.5,245.3L386.3,243L389.1,242L393.6,241L395.4,243.7L396,245.4L398.5,246L400.7,246.7Z" opacity="0.22"/><!-- Poland -->
+                  <path id="c-PT" d="M176.9,377.7L177.9,379.2L180.8,378.9L183.4,380.4L185.4,380.3L187.4,379.6L190.9,380.9L190.8,383.9L193.2,385.4L191.7,387.6L188.1,389.1L186.7,390.6L186.2,392.8L185.2,398.6L183.6,399.5L183.5,403L181.6,406L176.9,405.2L178.4,408.1L178.7,410.3L180.5,413.8L177.7,416.4L176,419.6L177.2,423.1L177.8,425L175.5,425.5L172,429.9L172.1,434.2L167.4,435.3L164.8,433.6L161.1,432.3L157.4,432.5L159.9,428L161,423.2L163.3,415.8L158.9,415.5L159.1,413L162.2,412.6L159.9,412.6L157.3,411.9L158.6,408L160,404.8L162.8,402.8L163.8,401L165.8,397.8L168.1,392.6L169.3,390.9L170.4,387.8L170.7,381.7L171,376.9L173.8,375.3L177.5,375L176.9,377.7Z M70.5,459.4L67.3,457.2L70.4,457.1L71.4,458.7L70.5,459.4Z M12.3,366.1L13.7,367.9L17.2,369.2L14.1,369.7L12.1,368.1L11.5,366.2L12.3,366.1Z M14.5,380.1L13.1,378.9L14.5,380.1Z M6.3,352.3L4.1,351.8L3.5,349.9L5.9,350.5L6.3,352.3Z M-1.5,349.2L-3,347.6L-1.5,349.2Z M-5.7,349.5L-8.9,344.7L-6.8,345.5L-5.7,349.5Z" opacity="0.22"/><!-- Portugal -->
+                  <path id="c-UA" d="M503.5,246.5L505.9,245.5L508.7,247.1L512,249.9L510.7,252.6L512.5,253.8L513.3,255.6L516.1,256.2L519.5,255.2L522,256.5L523.8,259.5L524.1,261.5L526.7,263.5L529.4,261.4L531.7,262.4L534.2,262.2L538.8,257.8L540.7,258.8L542.2,260.6L544.2,261L546.2,261L551.9,260.3L553.4,258.8L556.9,259.3L559.2,260.5L561.3,258.9L561.5,260.8L563.3,262.8L562.5,265.5L562.5,267.7L562.8,270.8L564.5,272L565.5,274.2L566.6,279.6L564.5,280.5L561.8,281.6L560.2,284.5L557.9,286.7L558.1,290.2L558.9,292.5L556.5,294L554.3,294.9L553.1,297.6L551.1,298.6L550,300.9L547,302.1L546.1,303.7L543.4,304.6L540.3,309.3L538.6,310.7L536.6,313.3L534.5,313.6L535.5,315.1L532.5,314.7L529.7,314.9L527.6,315.4L530,316.6L532.5,317.2L535.6,316.6L539,318.1L540.8,319.5L541.6,321.2L543.8,321.5L550.2,317.2L553.3,317.1L552.8,321L549.7,323L547.3,323.2L544,327.4L541.3,328.9L537.8,334.3L536.1,335.3L533.6,335.4L531.8,335L531.9,331.5L531.4,329.6L529.9,328.2L528,328.5L524.6,327.4L521.8,327.9L525,322.6L529,319.1L527.7,316.6L524.4,317.6L522.5,318.5L518.8,320.1L513.7,319.3L514,317.5L511.5,317.7L515.5,316.1L513.2,314.7L507,316.9L504.1,318.9L504.4,320.7L503.6,323.7L499.3,331.6L499.5,333.7L499.9,335.8L496.9,334.5L491.6,338.5L488.7,338.2L487,336.7L489.1,335.7L488.6,333.9L489.9,331.7L490.3,329.6L491.6,326.7L490.2,323.3L492,322.3L493.8,322.3L495.5,323.2L497.7,322.7L497.1,320.8L497.1,318.2L495.2,317.3L493.3,315.2L492.2,312.3L490,311.8L488.4,310.9L488.5,307.8L487.4,305.9L485.4,306.3L482.4,304.8L476.6,304L473.4,303.3L471.4,305L468.3,305.3L467.1,307.4L465.1,308.8L464.4,310.9L458.7,313.3L456.4,315.9L451.8,314.2L449.3,315.5L447.1,315.4L443.9,315.3L440.9,314.8L438.8,316.8L436.4,315.5L434.9,314.1L433.2,313.1L431.9,310.6L432.9,309L433,306.9L434,304L436.4,304.6L435,302.2L433.9,298.2L434.9,296.3L437.1,291.7L438.5,289.8L439.7,287.9L441.9,286.3L442.2,283.8L441,282.1L440.1,279.3L437.9,276.9L436.7,274.3L437.5,272.3L439.4,272.8L441.1,270.7L441.5,268.9L445.4,267.8L447.1,266.6L450,266.5L453.1,265.8L456.8,266.2L459.7,266.5L461.5,265.8L463,267.3L465.9,266.9L468.4,266.5L469.6,265.1L472.4,265.5L474.2,265.1L475.8,263.8L478.3,266.1L480.3,264L483.9,263.2L487.2,265.2L485.9,260.9L487.5,255.2L489.5,254.6L493,252.8L495.7,252.7L496.6,249L499,249.1L501.8,246.8L503.5,246.5Z" opacity="0.10"/><!-- Ukraine -->
+                  <path id="c-SE" d="M390,78.2L394.3,79.4L395.2,81.1L397.6,82.8L398.1,87L399.5,88.9L399.2,91.3L402.1,95.6L402.2,98.8L402.1,102.1L403.6,103.6L404.7,105.3L405.6,107.1L403.9,108.6L402,108.2L400.1,109.9L397.2,108.8L397.4,111.8L395.8,112.8L395.7,114.7L394.5,118.2L393,121.7L394.1,123.7L396,125.7L394.7,127.8L393.7,129.5L393,132.9L391.5,135.4L389.7,136L388.2,138.4L386.1,138.6L385.2,141.8L383.1,142.9L382.3,146.4L380.6,149.8L378.8,151.8L378.4,155.4L378,158.2L378.5,160.7L378.2,169.4L378.9,172.4L381.6,173.8L385.4,175.7L387,178.2L391.1,182.2L389.8,188.4L388.9,190.9L386.7,191L385,193.8L383.1,192.9L382.2,195.4L380.4,195.8L378.4,197.2L379.7,199.8L380.1,202.5L378.7,204.7L378.6,209.5L378.6,213.7L378.7,218.6L376.5,224.9L375.2,228.1L373.6,226.7L368.1,227.5L367.9,229.3L365,231.6L365.8,235L361.8,236.6L359.3,237.6L357.1,237L356.8,233.4L353.6,227.5L354.4,225.2L355.9,224.2L354.5,222.3L353.4,220.1L350.7,215.9L350.1,213.6L348.9,211.7L347.8,210.1L346.9,205.5L345.9,203.6L344.4,201.3L343.6,196.2L344.3,193.7L345.8,196L347.8,191.8L346.9,187.8L348.2,186.4L349.8,183.8L351.3,181.9L351.9,176.8L349.6,170.9L352.1,170.2L352.9,166.5L351.4,164.3L348.9,162.4L349.1,158.6L349.4,155.9L348,151.9L348,148.5L347.4,144.2L348.3,141.8L350.6,135.8L353.5,134.1L357.5,134.6L358.2,132.6L357.9,130L355.6,128.3L358.4,121.7L359.1,119.2L359,116.1L359.3,113.5L358.7,110.5L361,109.3L362.7,107.9L362.7,104.8L366.4,98.1L364.9,94L366.4,91.5L367.2,87.9L369,85.7L372.2,86.3L372.8,83.9L372.3,80L380.5,80.8L380.6,78.6L381.2,75.4L380.4,73.2L382.9,72.8L385.9,75.5L387.8,77.1L389.5,78.1L390,78.2Z M391,215L388.5,212.8L388.7,209.2L390,206.4L393.3,204.6L393,210.9L391,215Z M381.9,214.8L379.1,225.6L378.3,223L381.4,213.2L381.9,214.8Z" opacity="0.22"/><!-- Sweden -->
+                  <path id="c-SI" d="M386.3,336.6L388.2,336.8L388.8,338.9L390.1,340.7L388.3,340.5L388.3,342.3L386.3,342.3L384.9,343.7L383,345L383.8,347.4L382.5,349.1L380.9,350.2L380.7,352.3L380.3,354.2L378,353.3L375.7,352.7L373,354L371,354.1L367.6,354.6L368.5,353L367.4,350.8L366.7,348.9L366.8,346.2L365.1,345.6L366.8,343L369.5,342.4L371.4,342.8L373.7,342.9L376.1,341.6L378,339.8L380.2,339.6L382,339.3L383.8,338.7L385.9,339.1L385.4,337.1L386.3,336.6Z" opacity="0.22"/><!-- Slovenia -->
+                  <path id="c-SK" d="M411.1,303.6L412.4,305.7L414.7,305.7L415.3,304L418.4,302.5L421.1,303.4L422.1,301.9L424.4,301.4L428.1,301.6L430.1,303.1L434,304L433.2,306L432.9,309L431.9,310.6L432.1,312.6L429.2,313.7L427.7,312.2L423.8,312.6L420.4,312.5L418.9,313.9L418,316.1L416.1,317.8L412.6,317.5L411.5,319.2L408.1,320L406.4,321.6L399.7,325L394.2,322.3L392.7,321.2L390.6,318.2L391.3,316.3L392.7,312.4L394.5,312.7L396.4,312L399.4,309.4L399.9,306.8L401.5,305L402.7,303.6L404.8,303.2L407.2,304.1L409.4,301.4L411.1,303.6Z" opacity="0.22"/><!-- Slovakia -->
+                  <path id="c-TR" d="M554.7,359L555.4,360.7L558.2,362.1L560.2,361.9L562.2,360.4L564.1,360.5L565.7,362.8L568.4,363.7L569.6,362.1L572.6,362L574.9,362.7L577.9,362.5L579.8,361.3L581.6,362.1L583.5,361.8L586.6,361.1L589.4,358.7L591.7,356.9L593.5,356L597.2,355.5L599.2,355.3L601.6,353.8L604.1,351.6L607.6,346.8L609.2,343.5L612.4,342.3L614.2,341.5L617.4,340.8L617.5,339L619.5,338.9L623.4,339.8L625.8,340.3L627.8,341.7L630.4,343.9L630.4,347.4L632.4,349.7L635.2,350.9L637.9,349.3L641.5,350.2L643.6,350.8L641.5,352.1L641.9,354.9L639.7,356.9L641.7,359.5L642.4,361.2L644,362.6L646,366.6L647.9,367L647.8,368.8L647.8,371.8L649.8,373.1L651.8,373.2L653.3,376.1L655.3,377L655.9,378.7L654.3,379.6L652.5,382.6L651.2,381.2L649.5,379.7L648,381.6L646.1,382.6L642.8,382.8L640.3,383.8L638.5,384.5L637.3,386.4L636.2,388.5L633.6,387.9L629.5,391.8L626.1,393.8L623.3,394.7L617.9,399.5L614.8,402.7L611.7,404.8L610,405.8L607,406.7L604.4,406.9L601.4,406.5L599.3,407.8L596.1,410.3L594.8,411.8L590.9,413.6L587.3,412.8L586.9,416.8L588.5,419.1L586.6,420.8L586.6,423.1L585.8,424.8L583.1,425.5L580.8,421.6L583.1,416.7L582.3,414.8L580.4,413.9L579.1,416.3L578.1,418.7L575.9,420.2L571.2,419.7L568,420.4L565.9,423.6L564.3,427.4L562,429.5L559.7,430.8L555.2,433.1L551.8,433.7L549.3,433L545.4,430.3L539.1,429.3L535.5,429.3L531.7,430.9L531.5,437.6L529.3,437.8L525.3,440.7L520.6,440.1L518.1,437.4L515.6,437L512.7,436.1L510.5,436.8L508.5,439.2L507,438.1L504.7,439L502.9,439.6L505.6,437.8L507.8,435.5L500.7,436.5L501.9,433.5L500.5,432.2L498.5,430.9L496.9,429.4L498.1,428L498.2,425.9L494.2,425.1L492.7,424L488.2,423.8L489.4,422.1L488.3,419.9L490.1,419.9L491.1,421.4L494.7,420.7L492.7,419.2L493.2,415.4L491.6,414.2L490.7,412.5L488.9,411L490.9,408.3L488.8,408.3L484,410L483.5,405L485,402.5L487.3,398.6L489.4,397.8L491.8,397L494.5,397.8L496.5,396.7L495.4,395.2L497.5,394.8L500.2,395.4L505.7,394.3L508.2,393L505.3,392.4L507.1,390.6L510.7,388.8L509,387.9L507.2,387.3L506.4,385.5L506.6,383.7L508.6,383.2L513.1,382.9L517.1,381.4L522.6,381.1L525.1,379.9L525.8,377.1L529.2,373.8L530.6,372.3L532.8,369.6L534.9,367.9L539.8,364.3L546.7,362.6L551.7,360.8L553.5,358.9L554.7,359Z M489.6,378.4L492.8,378.2L494.9,378.7L496.3,381.1L497.9,382.3L502.3,383.4L504.6,383.4L504.4,386L503.4,387.5L499.1,387.5L497.1,388.4L494.8,389.3L492.9,390.6L491.8,393.3L490.6,395L488.6,396.4L487,397.9L485.6,400.4L483.9,403.1L483.4,400.3L485.9,397.8L487.4,396.3L481.6,397L482.3,393.2L482.3,391L482.5,388.9L484,387.4L483.3,384.9L481.4,384L482.1,382.2L484.8,379.7L486.3,378.3L489.4,378.3L489.6,378.4Z M494.8,394.7L493.6,396.2L493.8,393.8L495.9,393.4L494.8,394.7Z M480.2,403.5L481.9,402.7L480.2,403.5Z" opacity="0.10"/><!-- Türkiye -->
+                </g>
+
+                <!-- Country activity heat points (Shadowserver-modeled) -->
+                <g id="country-activity-layer"></g>
+
+                <!-- CERT markers (ENISA national CSIRTs + CERT-EU) -->
+                <g id="cert-marker-layer"></g>
+
+                <!-- Radar rings (centered on central Europe) -->
+                <g opacity="0.08" stroke="#ffb4a8" fill="none">
+                  <circle cx="377" cy="290" r="60"/>
+                  <circle cx="377" cy="290" r="120"/>
+                  <circle cx="377" cy="290" r="180"/>
+                  <circle cx="377" cy="290" r="250"/>
+                </g>
+
+                <!-- Radar scan cone (subtle map illumination) -->
+                <g id="radar-scan-cone" clip-path="url(#mapClip)">
+                  <path d="M377,290 L277,0 L477,0 Z" fill="url(#scanGrad)" opacity="0.7"/>
+                  <path d="M377,290 L327,40 L377,30 Z" fill="#ffb4a8" opacity="0.025"/>
+                </g>
+
+                <!-- Radar sweep arm -->
+                <g id="radar-sweep-arm" transform-origin="377 290">
+                  <line x1="377" y1="290" x2="377" y2="40" stroke="url(#sweepGrad)" stroke-width="2" opacity="0.5"/>
+                  <path d="M377,290 L357,50 L377,40 Z" fill="#ffb4a8" opacity="0.04"/>
+                </g>
+
+                <!-- Live threat blips container -->
+                <g id="radar-blips"></g>
+
+                <!-- EU capital city dots (EPSG:3035 → SVG projected) -->
+                <g class="eu-capital-dots" font-family="Space Grotesk" font-size="6" fill="#ffb4a8">
+                  <!-- EU Member States -->
+                  <circle cx="387.1" cy="320.6" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="392" y="323.6" opacity="0.35">VIE</text>
+                  <circle cx="294.3" cy="289.8" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="299" y="292.8" opacity="0.35">BRU</text>
+                  <circle cx="452.7" cy="377.7" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="458" y="380.7" opacity="0.35">SOF</text>
+                  <circle cx="386.2" cy="349.1" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="391" y="352.1" opacity="0.35">ZAG</text>
+                  <circle cx="562.2" cy="441.8" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="567" y="444.8" opacity="0.35">NIC</text>
+                  <circle cx="370.5" cy="299.6" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="375" y="302.6" opacity="0.35">PRA</text>
+                  <circle cx="353.9" cy="233.9" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="359" y="236.9" opacity="0.35">CPH</text>
+                  <circle cx="425.3" cy="180.4" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="430" y="183.4" opacity="0.35">TAL</text>
+                  <circle cx="424.5" cy="171.6" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="430" y="174.6" opacity="0.35">HEL</text>
+                  <circle cx="276.9" cy="312" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="282" y="315" opacity="0.35">PAR</text>
+                  <circle cx="361.3" cy="271.1" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="366" y="274.1" opacity="0.35">BER</text>
+                  <circle cx="465.4" cy="431.9" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="470" y="434.9" opacity="0.35">ATH</text>
+                  <circle cx="409.1" cy="326.8" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="414" y="329.8" opacity="0.35">BUD</text>
+                  <circle cx="222.3" cy="248.9" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="227" y="251.9" opacity="0.35">DUB</text>
+                  <circle cx="358.8" cy="397" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="364" y="400" opacity="0.35">ROM</text>
+                  <circle cx="427.5" cy="210.1" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="432" y="213.1" opacity="0.35">RIG</text>
+                  <circle cx="440.8" cy="234.9" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="446" y="237.9" opacity="0.35">VIL</text>
+                  <circle cx="306.8" cy="305.4" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="312" y="308.4" opacity="0.35">LUX</text>
+                  <circle cx="380.5" cy="466.7" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="386" y="469.7" opacity="0.35">VAL</text>
+                  <circle cx="299.7" cy="272.2" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="305" y="275.2" opacity="0.35">AMS</text>
+                  <circle cx="416.5" cy="269" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="422" y="272" opacity="0.35">WAR</text>
+                  <circle cx="160.2" cy="412.5" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="165" y="415.5" opacity="0.35">LIS</text>
+                  <circle cx="472.4" cy="352.8" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="477" y="355.8" opacity="0.35">BUC</text>
+                  <circle cx="392.9" cy="320.8" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="398" y="323.8" opacity="0.35">BRA</text>
+                  <circle cx="373.8" cy="347.1" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="379" y="350.1" opacity="0.35">LJU</text>
+                  <circle cx="212.8" cy="403.6" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="218" y="406.6" opacity="0.35">MAD</text>
+                  <circle cx="385.6" cy="188.1" r="1.8" fill="#ffb4a8" opacity="0.45"/><text x="391" y="191.1" opacity="0.35">STO</text>
+                  <!-- Non-EU neighbors -->
+                  <circle cx="262" cy="278.5" r="1.8" fill="#ffb4a8" opacity="0.3"/><text x="267" y="281.5" opacity="0.25">LON</text>
+                  <circle cx="341.1" cy="184" r="1.8" fill="#ffb4a8" opacity="0.3"/><text x="346" y="187" opacity="0.25">OSL</text>
+                  <circle cx="315.9" cy="337.4" r="1.8" fill="#ffb4a8" opacity="0.3"/><text x="321" y="340.4" opacity="0.25">BRN</text>
+                  <circle cx="489.7" cy="274.5" r="1.8" fill="#ffb4a8" opacity="0.3"/><text x="495" y="277.5" opacity="0.25">KYI</text>
+                </g>
+              </svg>
+            </div>
+            <!-- Radar Controls -->
+            <div class="p-4 border-t border-outline-variant/15 flex justify-between items-center bg-surface-container-high">
+              <div class="flex gap-4">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 bg-error rounded-full animate-pulse"></span>
+                  <span class="font-label text-[10px] text-error uppercase tracking-widest">THREAT</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 bg-primary rounded-full"></span>
+                  <span class="font-label text-[10px] text-primary uppercase tracking-widest">NODE</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 bg-tertiary rounded-full"></span>
+                  <span class="font-label text-[10px] text-tertiary uppercase tracking-widest">PROBE</span>
+                </div>
+              </div>
+              <p class="font-label text-[10px] text-on-surface-variant italic hidden sm:block">LIVE FEED // EU_SECTOR ENCRYPTED VIA PROTOCOL_X7</p>
+            </div>
+          </div>
+
+          <!-- Communication Log — LIVE -->
+          <div class="bg-surface-container-low overflow-hidden reveal">
+            <div class="px-6 py-4 border-b border-outline-variant/15 flex justify-between items-center">
+              <h4 class="font-headline text-xs font-bold uppercase tracking-widest text-primary">COMMUNICATION_LOG</h4>
+              <span class="font-label text-[10px] text-on-surface-variant" id="log-entry-count">0 ENTRIES RECORDED</span>
+            </div>
+            <div id="comm-log-container" class="divide-y divide-outline-variant/5 max-h-[240px] overflow-y-auto custom-scrollbar">
+              <!-- Live log entries injected by JS -->
+            </div>
+          </div>
+
+          <!-- System Performance (live) -->
+          <div class="bg-[#1C1B1B] p-6 border-t border-primary/10 reveal">
+            <div class="flex items-center justify-between mb-6">
+              <h4 class="font-headline text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">System_Load</h4>
+              <span class="font-label text-[9px] text-primary/60 uppercase tracking-widest">LIVE</span>
+            </div>
+            <div class="space-y-6">
+              <div>
+                <div class="flex justify-between font-label text-[10px] text-primary mb-2 uppercase">
+                  <span>CPU_Core_Delta</span>
+                  <span id="system-cpu-value" class="transition-all duration-700">42%</span>
+                </div>
+                <div class="h-2 bg-surface-container-highest overflow-hidden">
+                  <div id="system-cpu-bar" class="h-full bg-primary transition-all duration-700 ease-out" style="width:42%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between font-label text-[10px] text-primary mb-2 uppercase">
+                  <span>Memory_Bandwidth</span>
+                  <span id="system-mem-value" class="transition-all duration-700">18.4 GB/s</span>
+                </div>
+                <div class="h-2 bg-surface-container-highest overflow-hidden">
+                  <div id="system-mem-bar" class="h-full bg-primary/80 transition-all duration-700 ease-out" style="width:61%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Threats, Nodes, Performance -->
+        <div class="space-y-8">
+          <!-- Active Threats — LIVE -->
+          <div class="bg-surface-container-low border-l-2 border-secondary-container reveal">
+            <div class="p-6">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">warning</span>
+                <h4 class="font-headline text-xs font-bold uppercase tracking-widest text-secondary-container">Active Threats</h4>
+                <span class="ml-auto flex items-center gap-1"><span class="w-1.5 h-1.5 bg-error rounded-full animate-pulse"></span><span class="font-label text-[8px] text-error">LIVE</span></span>
+              </div>
+              <div id="live-threats-container" class="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+                <div class="flex items-center justify-center py-8">
+                  <span class="font-label text-[10px] text-primary/40 animate-pulse">CONNECTING TO THREAT FEED...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Latest Breaches (HIBP) -->
+          <div class="bg-surface-container-low border-l-2 border-primary reveal">
+            <div class="p-6">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">dataset</span>
+                <h4 class="font-headline text-xs font-bold uppercase tracking-widest text-primary">Latest Breaches</h4>
+              </div>
+              <div id="live-breaches-container" class="space-y-3 max-h-[260px] overflow-y-auto custom-scrollbar">
+                <div class="flex items-center justify-center py-6">
+                  <span class="font-label text-[10px] text-primary/40">WAITING FOR HIBP FEED...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advisories (CERT-EU + National CERTs) -->
+          <div class="bg-surface-container-low border-l-2 border-tertiary reveal">
+            <div class="p-6">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">policy_alert</span>
+                <h4 class="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">Advisories</h4>
+              </div>
+              <div id="advisories-container" class="space-y-3 max-h-[260px] overflow-y-auto custom-scrollbar">
+                <div class="flex items-center justify-center py-6">
+                  <span class="font-label text-[10px] text-primary/40">WAITING FOR CERT FEEDS...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 4: CAPABILITIES (Services)
+       ══════════════════════════════════════════════════ -->
+  <section id="capabilities" class="py-24 px-6 md:px-20 relative bg-surface-container-lowest">
+    <div class="mb-16 reveal">
+      <span class="font-label text-primary text-xs uppercase tracking-[0.4em]">_SYSTEM_CAPABILITIES</span>
+      <h2 class="font-headline text-4xl md:text-5xl font-black uppercase mt-2 italic">Vector Analysis</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-secondary-container/10 reveal">
+      <!-- Service Card 1 -->
+      <div class="bg-surface group hover:bg-surface-container-high transition-all p-10 border border-transparent hover:border-primary/20">
+        <div class="mb-8">
+          <span class="material-symbols-outlined text-5xl text-primary transition-transform group-hover:scale-110 duration-500" style="font-variation-settings: 'FILL' 1;">hub</span>
+        </div>
+        <h3 class="font-headline text-2xl font-bold uppercase mb-4">Network Audits</h3>
+        <p class="font-body text-white/50 text-sm leading-relaxed mb-8">
+          Deep packet inspection and perimeter testing to identify lateral movement vulnerabilities in enterprise networks.
+        </p>
+        <div class="font-label text-[10px] text-primary tracking-widest flex items-center group-hover:translate-x-2 transition-transform">
+          _RUN_SCAN <span class="material-symbols-outlined text-xs ml-2">chevron_right</span>
+        </div>
+      </div>
+      <!-- Service Card 2 -->
+      <div class="bg-surface group hover:bg-surface-container-high transition-all p-10 border border-transparent hover:border-primary/20">
+        <div class="mb-8">
+          <span class="material-symbols-outlined text-5xl text-primary transition-transform group-hover:scale-110 duration-500" style="font-variation-settings: 'FILL' 1;">cloud_lock</span>
+        </div>
+        <h3 class="font-headline text-2xl font-bold uppercase mb-4">Cloud Security</h3>
+        <p class="font-body text-white/50 text-sm leading-relaxed mb-8">
+          Hardening AWS/Azure/GCP environments against misconfiguration exploits and unauthorized cloud-native pivots.
+        </p>
+        <div class="font-label text-[10px] text-primary tracking-widest flex items-center group-hover:translate-x-2 transition-transform">
+          _SECURE_CLOUD <span class="material-symbols-outlined text-xs ml-2">chevron_right</span>
+        </div>
+      </div>
+      <!-- Service Card 3 -->
+      <div class="bg-surface group hover:bg-surface-container-high transition-all p-10 border border-transparent hover:border-primary/20">
+        <div class="mb-8">
+          <span class="material-symbols-outlined text-5xl text-primary transition-transform group-hover:scale-110 duration-500" style="font-variation-settings: 'FILL' 1;">security</span>
+        </div>
+        <h3 class="font-headline text-2xl font-bold uppercase mb-4">Threat Intel</h3>
+        <p class="font-body text-white/50 text-sm leading-relaxed mb-8">
+          Real-time monitoring and dark-web scraping to proactively neutralize upcoming targeted campaigns against your asset.
+        </p>
+        <div class="font-label text-[10px] text-primary tracking-widest flex items-center group-hover:translate-x-2 transition-transform">
+          _GENERATE_INTEL <span class="material-symbols-outlined text-xs ml-2">chevron_right</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 5: MISSION PROTOCOL (Case Studies)
+       ══════════════════════════════════════════════════ -->
+  <section id="engagements" class="py-24 px-6 md:px-20 bg-surface-container-low">
+    <div class="flex justify-between items-end mb-16 reveal">
+      <div>
+        <span class="font-label text-primary text-xs uppercase tracking-[0.4em]">_MISSION_PROTOCOL</span>
+        <h2 class="font-headline text-4xl md:text-5xl font-black uppercase mt-2 italic">Past Engagements</h2>
+      </div>
+      <div class="hidden md:block font-label text-[10px] text-white/20 uppercase tracking-[0.3em]">REDACTED_DATA_ENABLED</div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 reveal">
+      <!-- Case 1 -->
+      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair">
+        <img alt="Server room" class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7QV5od5gLb2A0wlKOd6c8IH3zT68EEtm-D6qggG-vff_R-nzdkuAMZGQEjl99IqQn6VSsIuY1TA7sSXvsPMxi4zz5YDv0vgefCIlT1kZNBZpZW1eu0OeG6jIDwbzzKw5w31LdW2UDypRBZ2JC5GZCPADT_cGn0JdEXveoqPpdRrVI29cZbfNR5M9ktNvyLZBVSnsaVgHE1IXGs47z0MYBp9sB-r41A6BypztgeC7Xe6g29NXIa5-GP5hYT-U5AwA4mqCekzVGK_08"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+          <span class="font-label text-[10px] text-primary mb-2 uppercase">OP_GHOST_RUN</span>
+          <h4 class="font-headline text-xl font-bold uppercase">Financial Sector Breach Audit</h4>
+        </div>
+        <div class="absolute top-4 right-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+          <span class="material-symbols-outlined text-sm">visibility</span>
+        </div>
+      </div>
+      <!-- Case 2 -->
+      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair">
+        <img alt="Coding screen" class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3hr_zRHEB8ukjxLSHMoTNtUHdnVZndLOWhKoC2Y-XT3ogk0LAhQMCi-fHT3iLM_X1kLiJmP6tjiQrDae0qrQl9dD8vgfZ5rG3TA-Ws3Z1TmV_1RL0Vd-_ABLv1z6eV87ptFxrXweMayO3gmH-2CCepzTh-jraEJ2sTCjqTs2YuLHr6KMEQaAk5o8ClM-PqBD-L7hLmKLhIwfHCkW66gbL_M4_uWa92wcTO7cicg7DFmOb4LcXkI-kp6GxzAy2w8qp74sTjH0dyajn"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+          <span class="font-label text-[10px] text-primary mb-2 uppercase">OP_VOID_STAR</span>
+          <h4 class="font-headline text-xl font-bold uppercase">Critical Infrastructure Hardening</h4>
+        </div>
+        <div class="absolute top-4 right-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+          <span class="material-symbols-outlined text-sm">visibility</span>
+        </div>
+      </div>
+      <!-- Case 3 -->
+      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair">
+        <img alt="Modern office" class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTh99JDujhyBkXQZyY1u7J5BGhv-NhFyVaQtJk8-LiFG4KliFo99VbeXF_ooNUOaGZQs6Qo1__GY9wmFFrX2xDGCtcgq5hz5t3woCUlFAPqbYAM2csKK32DeToHTKvDcnHRHX_MpKgw3qFXg1ilR2MYF4Y0VG8HEiDkCjgrMkni5I_0o3wZuTsUM0QPH6vgGj6cOZFV3u7OvhcADqoa6yzoR5pXqwqRRcni8YBk0-UChPoYERV4sfy6ZozJ6lQcv1kWgl7S7XKBNvE"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+          <span class="font-label text-[10px] text-primary mb-2 uppercase">OP_IRON_GATE</span>
+          <h4 class="font-headline text-xl font-bold uppercase">Identity Access Overhaul</h4>
+        </div>
+        <div class="absolute top-4 right-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+          <span class="material-symbols-outlined text-sm">visibility</span>
+        </div>
+      </div>
+      <!-- Case 4 -->
+      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair">
+        <img alt="Technology" class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTYi8KV1le1NfmC018LpBNh4N_RA0z8cKn8T51UrWTcU8SIl0D3PZWYBzkhH4QeEgB2Kqc5-numGC6NdtqjM_GfTgCV2YTxCrdyTffwrBoToFI1UkHUeH_mOVEg9A1Pr_rUPpAWjGJI8Tt0EE78_QmZ1DGKVWk4mOBq8fPWOqJGrZifUiSRypn4BJYppym4PuIN5JfkMrWyo1MVZhMLE6K_7VHtUVpdDA4ODlVVYMxo3x9cK4tcIziVXit_Vc-dC_2yIuLq7Y2joG6"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+          <span class="font-label text-[10px] text-primary mb-2 uppercase">OP_PULSE_WAVE</span>
+          <h4 class="font-headline text-xl font-bold uppercase">Global DNS Security Sync</h4>
+        </div>
+        <div class="absolute top-4 right-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+          <span class="material-symbols-outlined text-sm">visibility</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 6: CONTACT / SECURE UPLINK
+       ══════════════════════════════════════════════════ -->
+  <section id="contact" class="py-24 px-6 md:px-20 relative overflow-hidden">
+    <div class="grid-overlay absolute inset-0 opacity-5"></div>
+    <div class="max-w-4xl mx-auto relative z-10 reveal">
+      <div class="text-center mb-16">
+        <span class="font-label text-primary text-xs uppercase tracking-[0.4em]">_SECURE_UPLINK</span>
+        <h2 class="font-headline text-4xl md:text-6xl font-black uppercase mt-4 italic">Initiate Contact</h2>
+        <p class="font-body text-white/40 mt-6 max-w-lg mx-auto">
+          End-to-end encrypted channel. All metadata is purged after 24 hours. State your objective.
+        </p>
+      </div>
+      <form class="space-y-8 bg-surface-container-low p-8 md:p-12 border border-secondary-container/20" onsubmit="return false;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-2">
+            <label class="font-label text-[10px] text-white/40 uppercase tracking-widest">IDENT_LABEL</label>
+            <input class="w-full bg-surface-container-lowest border-0 border-b border-outline-variant/30 py-4 px-4 text-primary font-label focus:ring-0 focus:border-primary transition-all placeholder:text-white/10" placeholder="WHO_ARE_YOU?" type="text"/>
+          </div>
+          <div class="space-y-2">
+            <label class="font-label text-[10px] text-white/40 uppercase tracking-widest">COMM_ADDRESS</label>
+            <input class="w-full bg-surface-container-lowest border-0 border-b border-outline-variant/30 py-4 px-4 text-primary font-label focus:ring-0 focus:border-primary transition-all placeholder:text-white/10" placeholder="WHERE_TO_REPLY?" type="email"/>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="font-label text-[10px] text-white/40 uppercase tracking-widest">BRIEF_INTEL</label>
+          <textarea class="w-full bg-surface-container-lowest border-0 border-b border-outline-variant/30 py-4 px-4 text-primary font-label focus:ring-0 focus:border-primary transition-all placeholder:text-white/10 resize-none" placeholder="STATE_YOUR_OBJECTIVE..." rows="4"></textarea>
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div class="hidden md:flex items-center space-x-3 text-white/20">
+            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">lock</span>
+            <span class="font-label text-[9px] uppercase tracking-tighter">RSA_4096_ENCRYPTED_ENABLED</span>
+          </div>
+          <button class="bg-primary text-on-primary px-12 py-4 font-headline font-black tracking-widest uppercase hover:shadow-[0_0_20px_rgba(255,180,168,0.3)] transition-all active:scale-95" type="submit">
+            TRANSMIT_UPLINK
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════════════ -->
+  <footer class="w-full border-t border-secondary-container/20 py-12 bg-surface-container-lowest flex flex-col items-center justify-center space-y-8">
+    <div class="flex space-x-12">
+      <a class="font-label text-[10px] tracking-[0.2em] text-white/40 hover:text-primary transition-colors underline decoration-dotted" href="#">_GITHUB</a>
+      <a class="font-label text-[10px] tracking-[0.2em] text-white/40 hover:text-primary transition-colors underline decoration-dotted" href="#">_LINKEDIN</a>
+      <a class="font-label text-[10px] tracking-[0.2em] text-white/40 hover:text-primary transition-colors underline decoration-dotted" href="#">_X</a>
+    </div>
+    <div class="text-center">
+      <p class="font-label text-[10px] tracking-[0.2em] text-white/20 uppercase">
+        &copy; 2026 Noctra Digital // ALL_RIGHTS_RESERVED
+      </p>
+      <p class="font-label text-[9px] tracking-[0.1em] text-primary/30 mt-2 uppercase">
+        DESIGNED_BY_Noctra_Digital // SECURE_NODE_X09
+      </p>
+    </div>
+  </footer>
+
+</main>
+
+<!-- Background Grid Anchor -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.03] z-[-1]" style="background-image: radial-gradient(circle, #ffb4a8 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+<!-- ╔═══════════════════════════════════════════════════╗
+     ║  SCRIPTS: Animations & Interactions              ║
+     ╚═══════════════════════════════════════════════════╝ -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ─── Mobile Menu ───────────────────────────────────
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenuClose = document.getElementById('mobile-menu-close');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('hidden'));
+  }
+  if (mobileMenuClose) {
+    mobileMenuClose.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+  }
+  window.closeMobileMenu = () => mobileMenu.classList.add('hidden');
+
+  // ─── Header Scroll Effect ─────────────────────────
+  const topbar = document.getElementById('topbar');
+  const topbarBrand = document.getElementById('topbar-brand');
+
+  if (topbarBrand) {
+    const BRAND_LIMIT = 320;
+    const clamp = (v) => Math.max(-BRAND_LIMIT, Math.min(BRAND_LIMIT, v));
+    try {
+      const saved = Number(window.localStorage.getItem('topbarBrandOffsetX'));
+      if (Number.isFinite(saved)) {
+        topbarBrand.style.setProperty('--brand-offset-x', `${clamp(saved)}px`);
+      }
+    } catch (_) {}
+  }
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      topbar.classList.add('header-scrolled');
+    } else {
+      topbar.classList.remove('header-scrolled');
+    }
+  });
+
+  // ─── Active Nav Highlighting ──────────────────────
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sideNavLinks = document.querySelectorAll('.side-nav-link');
+
+  const observerNav = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+        sideNavLinks.forEach(link => {
+          const isActive = link.getAttribute('data-section') === id;
+          link.classList.toggle('active', isActive);
+          const icon = link.querySelector('span:first-child');
+          if (icon) {
+            if (isActive) {
+              icon.style.color = '#ffb4a8';
+              icon.style.fontVariationSettings = "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24";
+            } else {
+              icon.style.color = '';
+              icon.style.fontVariationSettings = "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24";
+            }
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -70% 0px' });
+
+  sections.forEach(section => observerNav.observe(section));
+
+  // ─── Scroll Reveal ────────────────────────────────
+  const revealElements = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  // ─── Terminal CLI Animation ───────────────────────
+  const terminal = document.getElementById('terminal-content');
+  if (terminal) {
+    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const writeTypedLine = async (line, cls = 'text-white/80') => {
+      const row = document.createElement('div');
+      row.className = `typing-line ${cls}`;
+      terminal.appendChild(row);
+
+      for (const ch of line) {
+        row.textContent += ch;
+        terminal.scrollTop = terminal.scrollHeight;
+        await wait(Math.random() * 13 + 8);
+      }
+    };
+
+    const writeCommand = async (cmd) => {
+      await writeTypedLine(`> ${cmd}`, 'text-primary');
+    };
+
+    const addSpacer = (h = 3) => {
+      const spacer = document.createElement('div');
+      spacer.style.height = `${h * 0.25}rem`;
+      terminal.appendChild(spacer);
+      terminal.scrollTop = terminal.scrollHeight;
+    };
+
+    const writeBootLine = async (line) => {
+      await writeTypedLine(line, 'text-primary font-bold tracking-wide border-l-2 border-primary pl-3 bg-primary/10');
+    };
+
+    const writeSectionHeader = async (header) => {
+      await writeTypedLine(header, 'text-primary font-bold tracking-widest text-xs uppercase mt-4');
+    };
+
+    const runCliPlayback = async () => {
+      terminal.innerHTML = '';
+
+      await writeBootLine('[INITIALIZING...] SYSTEM_RECOVERY_STARTED');
+      await wait(180);
+      await writeBootLine('[LOADING...] EXPERTISE_MODULES... DONE.');
+      await wait(170);
+      await writeBootLine('[LOADING...] BIOMETRIC_DATA... ENCRYPTED.');
+      await wait(420);
+      addSpacer(4);
+
+      await writeCommand('whoami');
+      await wait(420);
+      await writeTypedLine('Kamil Szeibel is a high-stakes cybersecurity architect and penetration testing elite. Specializing in offensive security maneuvers, I disassemble complex networks to reconstruct them into impenetrable strongholds.', 'text-white/80');
+      await wait(480);
+      addSpacer(4);
+
+      await writeCommand('expertise --list');
+      await wait(420);
+      await writeTypedLine('- Advanced Persistent Threat Simulation', 'text-white/80');
+      await writeTypedLine('- Zero-Knowledge Architecture Design', 'text-white/80');
+      await writeTypedLine('- Cryptographic Integrity Audits', 'text-white/80');
+      await writeTypedLine('- Cloud Infrastructure Hardening', 'text-white/80');
+      await wait(460);
+      addSpacer(4);
+
+      await writeSectionHeader('// CORE_PHILOSOPHY');
+      await writeTypedLine('Security is not a state, but a continuous process of calculated paranoia. We do not build walls; we build immune systems.', 'text-white/70');
+      await wait(360);
+      addSpacer(3);
+
+      await writeSectionHeader('// UPTIME_STATISTICS');
+      await writeTypedLine('Operational hours: 24/7/365. Breach containment rate: 100%. Client satisfaction: Zero-compromise.', 'text-white/70');
+
+      const cursorLine = document.createElement('div');
+      cursorLine.className = 'mt-3 text-primary';
+      cursorLine.innerHTML = '<span class="terminal-cursor"></span>';
+      terminal.appendChild(cursorLine);
+      terminal.scrollTop = terminal.scrollHeight;
+    };
+
+    const terminalObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          runCliPlayback();
+          terminalObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    terminalObserver.observe(terminal);
+  }
+
+  // ════════════════════════════════════════════════════
+  // LIVE THREAT INTELLIGENCE — API CONSUMER
+  // ════════════════════════════════════════════════════
+
+  const INTEL_API = '/api/live-intel';
+
+  const SEVERITY_COLORS = {
+    'LOW':      { text: '#ffb4a8', bg: 'rgba(255,180,168,0.1)',  border: 'rgba(255,180,168,0.2)' },
+    'MEDIUM':   { text: '#ffb4ac', bg: 'rgba(255,180,172,0.1)',  border: 'rgba(255,180,172,0.2)' },
+    'HIGH':     { text: '#ff5540', bg: 'rgba(255,85,64,0.1)',    border: 'rgba(255,85,64,0.25)' },
+    'CRITICAL': { text: '#ffb4ab', bg: 'rgba(147,0,10,0.3)',     border: 'rgba(147,0,10,0.5)' },
+  };
+
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const blipsContainer = document.getElementById('radar-blips');
+  const certMarkerLayer = document.getElementById('cert-marker-layer');
+  const countryActivityLayer = document.getElementById('country-activity-layer');
+  const threatsContainer = document.getElementById('live-threats-container');
+  const breachesContainer = document.getElementById('live-breaches-container');
+  const advisoriesContainer = document.getElementById('advisories-container');
+  const commLogContainer = document.getElementById('comm-log-container');
+  const systemCpuValueEl = document.getElementById('system-cpu-value');
+  const systemCpuBarEl = document.getElementById('system-cpu-bar');
+  const systemMemValueEl = document.getElementById('system-mem-value');
+  const systemMemBarEl = document.getElementById('system-mem-bar');
+
+  // ─── Radar Sweep Animation ──────────────────────
+  let sweepAngle = 0;
+  const sweepArm = document.getElementById('radar-sweep-arm');
+  const scanCone = document.getElementById('radar-scan-cone');
+  function animateSweep() {
+    sweepAngle = (sweepAngle + 1.5) % 360;
+    const rotateVal = `rotate(${sweepAngle}, 377, 290)`;
+    sweepArm.setAttribute('transform', rotateVal);
+    scanCone.setAttribute('transform', rotateVal);
+    requestAnimationFrame(animateSweep);
+  }
+  animateSweep();
+
+  // ─── Render map-level country activity ───────────
+  function renderCountryActivity(items) {
+    if (!countryActivityLayer) return;
+    countryActivityLayer.innerHTML = '';
+
+    (items || []).slice(0, 20).forEach((item) => {
+      const g = document.createElementNS(svgNS, 'g');
+
+      const intensity = Math.max(10, Number(item.intensity || 0));
+      const r = 2 + (intensity / 100) * 7;
+      const alpha = 0.08 + (intensity / 100) * 0.2;
+
+      const aura = document.createElementNS(svgNS, 'circle');
+      aura.setAttribute('cx', item.x);
+      aura.setAttribute('cy', item.y);
+      aura.setAttribute('r', r.toFixed(1));
+      aura.setAttribute('fill', '#ff5540');
+      aura.setAttribute('opacity', alpha.toFixed(2));
+      aura.innerHTML = '<animate attributeName="opacity" values="0.06;0.24;0.06" dur="3.8s" repeatCount="indefinite"/>';
+
+      const core = document.createElementNS(svgNS, 'circle');
+      core.setAttribute('cx', item.x);
+      core.setAttribute('cy', item.y);
+      core.setAttribute('r', '1.4');
+      core.setAttribute('fill', '#ffb4a8');
+      core.setAttribute('opacity', '0.7');
+
+      g.appendChild(aura);
+      g.appendChild(core);
+      countryActivityLayer.appendChild(g);
+    });
+  }
+
+  // ─── Render CERT markers on map ─────────────────
+  function renderCertMarkers(markers) {
+    if (!certMarkerLayer) return;
+    certMarkerLayer.innerHTML = '';
+
+    (markers || []).forEach((marker) => {
+      const g = document.createElementNS(svgNS, 'g');
+      g.setAttribute('opacity', marker.level === 'eu' ? '0.95' : '0.68');
+
+      const size = marker.level === 'eu' ? 4.2 : 3.3;
+      const diamond = document.createElementNS(svgNS, 'path');
+      diamond.setAttribute('d', `M${marker.x},${marker.y - size} L${marker.x + size},${marker.y} L${marker.x},${marker.y + size} L${marker.x - size},${marker.y} Z`);
+      diamond.setAttribute('fill', marker.level === 'eu' ? '#acc7ff' : '#9cc7a3');
+      diamond.setAttribute('stroke', '#131313');
+      diamond.setAttribute('stroke-width', '0.6');
+
+      const label = document.createElementNS(svgNS, 'text');
+      label.setAttribute('x', marker.x + 5);
+      label.setAttribute('y', marker.y - 3);
+      label.setAttribute('font-family', 'Space Grotesk');
+      label.setAttribute('font-size', '5.5');
+      label.setAttribute('fill', marker.level === 'eu' ? '#acc7ff' : '#9cc7a3');
+      label.setAttribute('opacity', marker.level === 'eu' ? '0.9' : '0.55');
+      label.textContent = marker.level === 'eu' ? 'CERT-EU' : marker.code;
+
+      g.appendChild(diamond);
+      g.appendChild(label);
+      certMarkerLayer.appendChild(g);
+    });
+  }
+
+  // ─── Render Radar Blips from API data ───────────
+  function renderRadarBlips(blips) {
+    // Fade-out existing blips
+    Array.from(blipsContainer.children).forEach(el => {
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 600);
+    });
+
+    blips.forEach((b, i) => {
+      setTimeout(() => {
+        const g = document.createElementNS(svgNS, 'g');
+        g.style.opacity = '0';
+        g.style.transition = 'opacity 0.5s ease';
+
+        const isThreat = b.severity === 'HIGH' || b.severity === 'CRITICAL';
+        const color = isThreat ? '#ff5540' : (b.severity === 'MEDIUM' ? '#ffb4ac' : '#acc7ff');
+
+        // Ripple ring
+        const ripple = document.createElementNS(svgNS, 'circle');
+        ripple.setAttribute('cx', b.x);
+        ripple.setAttribute('cy', b.y);
+        ripple.setAttribute('r', '3');
+        ripple.setAttribute('fill', 'none');
+        ripple.setAttribute('stroke', color);
+        ripple.setAttribute('stroke-width', '1');
+        ripple.setAttribute('opacity', '0.6');
+        ripple.innerHTML = `<animate attributeName="r" from="3" to="20" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite"/>`;
+        g.appendChild(ripple);
+
+        // Core dot
+        const dot = document.createElementNS(svgNS, 'circle');
+        dot.setAttribute('cx', b.x);
+        dot.setAttribute('cy', b.y);
+        dot.setAttribute('r', isThreat ? '4' : '3');
+        dot.setAttribute('fill', color);
+        dot.setAttribute('filter', isThreat ? 'url(#threatGlow)' : 'url(#nodeGlow)');
+        if (isThreat) {
+          dot.innerHTML = `<animate attributeName="r" values="3;5;3" dur="1s" repeatCount="indefinite"/>`;
+        }
+        g.appendChild(dot);
+
+        // Label
+        const label = document.createElementNS(svgNS, 'text');
+        label.setAttribute('x', b.x + 8);
+        label.setAttribute('y', b.y + 3);
+        label.setAttribute('fill', color);
+        label.setAttribute('font-family', 'Space Grotesk');
+        label.setAttribute('font-size', '7');
+        label.setAttribute('opacity', '0.8');
+        label.textContent = b.label || `${b.city}_${b.type.substring(0, 8)}`;
+        g.appendChild(label);
+
+        blipsContainer.appendChild(g);
+        requestAnimationFrame(() => { g.style.opacity = '1'; });
+      }, i * 150);
+    });
+
+    document.getElementById('radar-object-count').textContent =
+      `THREATS: ${String(blips.length).padStart(2, '0')} DETECTED`;
+  }
+
+  function renderFeedCards(container, items, sourceLabel) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    (items || []).slice(0, 8).forEach((item) => {
+      const row = document.createElement('a');
+      row.className = 'block p-3 bg-surface-container-lowest border border-outline-variant/10 hover:border-primary/30 transition-all';
+      row.href = item.url || '#';
+      row.target = '_blank';
+      row.rel = 'noopener noreferrer';
+
+      const when = item.timestamp ? new Date(item.timestamp).toLocaleDateString('en-GB') : '--';
+      row.innerHTML = `
+        <p class="font-label text-[9px] text-primary/70 uppercase tracking-widest mb-1">${sourceLabel || item.source || 'FEED'} // ${when}</p>
+        <p class="font-headline text-[11px] text-on-surface uppercase tracking-wide leading-tight mb-1">${item.title || 'Untitled advisory'}</p>
+        <p class="font-body text-[10px] text-on-surface-variant leading-relaxed">${(item.summary || '').slice(0, 140)}</p>
+      `;
+      container.appendChild(row);
+    });
+
+    if (!container.children.length) {
+      container.innerHTML = '<div class="py-4 text-center font-label text-[10px] text-primary/35">NO DATA AVAILABLE</div>';
+    }
+  }
+
+  // ─── Live System Load Widget ────────────────────
+  function updateSystemLoadWidget() {
+    if (!systemCpuValueEl || !systemCpuBarEl || !systemMemValueEl || !systemMemBarEl) return;
+
+    const cpu = Math.round(26 + Math.random() * 58); // 26-84%
+    const memGb = (12.0 + Math.random() * 10.5).toFixed(1); // 12.0-22.5 GB/s
+
+    systemCpuValueEl.textContent = `${cpu}%`;
+    systemCpuBarEl.style.width = `${cpu}%`;
+
+    systemMemValueEl.textContent = `${memGb} GB/s`;
+    const memPct = Math.round((Number(memGb) / 24) * 100);
+    systemMemBarEl.style.width = `${Math.max(18, Math.min(memPct, 96))}%`;
+  }
+
+  // ─── Global Status Pulse (stable <-> unstable) ──
+  function initGlobalStatusTicker() {
+    const statusEl = document.getElementById('global-status-text');
+    if (!statusEl) return;
+
+    let isStable = true;
+
+    const flipStatus = () => {
+      statusEl.classList.add('status-glitch');
+
+      setTimeout(() => {
+        isStable = !isStable;
+        if (isStable) {
+          statusEl.textContent = 'STABLE // NO BREACH';
+          statusEl.classList.remove('text-error');
+          statusEl.classList.add('text-primary');
+        } else {
+          statusEl.textContent = 'UNSTABLE // BREACH SIGNAL';
+          statusEl.classList.remove('text-primary');
+          statusEl.classList.add('text-error');
+        }
+      }, 220);
+
+      setTimeout(() => {
+        statusEl.classList.remove('status-glitch');
+      }, 620);
+    };
+
+    setInterval(flipStatus, 2900);
+  }
+
+  // ─── Render Threat Cards from API data ──────────
+  function renderThreatCards(items) {
+    threatsContainer.innerHTML = '';
+    items.slice(0, 6).forEach((item, i) => {
+      const sev = item.severity || 'MEDIUM';
+      const colors = SEVERITY_COLORS[sev] || SEVERITY_COLORS['MEDIUM'];
+      const isHigh = sev === 'HIGH' || sev === 'CRITICAL';
+      const timeText = item.timestamp ? new Date(item.timestamp).toLocaleTimeString('en-US', {hour12:false}) : '';
+      const locationText = `${item.radar?.city || ''} ${item.countryName || item.country || ''}`.trim();
+      const metaText = item.type === 'cve'
+        ? `${item.vendor ? `VENDOR: ${String(item.vendor).toUpperCase()} // ` : ''}${timeText}`
+        : `${locationText} // ${timeText}`;
+
+      const card = document.createElement('div');
+      card.className = 'p-4 relative transition-all duration-500';
+      card.style.cssText = `background:${colors.bg}; border:1px solid ${colors.border}; opacity:0; transform:translateX(20px);`;
+
+      card.innerHTML = `
+        <div class="flex justify-between items-start mb-2">
+          <span class="font-label text-[10px] uppercase tracking-tighter" style="color:${colors.text}">Severity: ${sev}</span>
+          <span class="font-label text-[10px] text-on-surface-variant">${item.source || ''}</span>
+        </div>
+        <p class="font-headline text-sm font-bold text-on-surface mb-1 tracking-wide uppercase">${item.title || item.type || 'UNKNOWN'}</p>
+        <p class="font-label text-[9px] text-primary/50 mb-2">${metaText}</p>
+        <p class="font-body text-[11px] text-on-surface-variant leading-relaxed">${item.summary || item.description || ''}</p>
+        ${isHigh ? `<div class="mt-3 flex gap-2">
+          <button class="flex-1 bg-secondary-container text-on-secondary-container font-label text-[10px] py-1.5 uppercase tracking-widest hover:brightness-125 transition-all">COUNTER</button>
+          <button class="flex-1 bg-surface-container-low text-on-surface font-label text-[10px] py-1.5 uppercase tracking-widest border border-outline-variant/20">TRACE</button>
+        </div>` : ''}
+      `;
+
+      setTimeout(() => {
+        threatsContainer.appendChild(card);
+        requestAnimationFrame(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateX(0)';
+        });
+      }, i * 200);
+    });
+  }
+
+  // ─── Render Communication Log from API data ─────
+  function renderCommLog(items) {
+    commLogContainer.innerHTML = '';
+    items.slice(0, 30).forEach((item, i) => {
+      const entry = document.createElement('div');
+      entry.className = 'px-6 py-3 grid grid-cols-4 gap-4 items-center hover:bg-surface-bright transition-colors cursor-default';
+      entry.style.cssText = 'opacity:0; transform:translateY(-10px); transition: opacity 0.3s, transform 0.3s;';
+
+      const isAlert = item.severity === 'HIGH' || item.severity === 'CRITICAL';
+      const colorClass = isAlert ? 'text-error' : 'text-on-surface';
+      const statusColor = isAlert ? 'text-error' : 'text-primary';
+
+      entry.innerHTML = `
+        <span class="font-label text-[10px] text-primary/60">${item.timestamp ? new Date(item.timestamp).toLocaleTimeString('en-US', {hour12:false}) : ''}</span>
+        <span class="font-label text-xs ${colorClass} col-span-2 truncate">${item.line || item.text || ''}</span>
+        <span class="font-label text-[10px] ${statusColor} text-right uppercase">${isAlert ? '_BLOCKED' : '_LOGGED'}</span>
+      `;
+
+      commLogContainer.appendChild(entry);
+      setTimeout(() => {
+        entry.style.opacity = '1';
+        entry.style.transform = 'translateY(0)';
+      }, i * 50);
+    });
+
+    document.getElementById('log-entry-count').textContent = `${items.length} ENTRIES RECORDED`;
+  }
+
+  // ─── Update Stats from API response ────────────
+  function updateStatsFromApi(stats) {
+    if (!stats) return;
+    document.getElementById('stat-threats-24h').textContent = (stats.threats24h || 0).toLocaleString();
+    document.getElementById('stat-threats-bar').style.width = (stats.threatBarPercent || 2) + '%';
+
+    const avgMs = stats.avgResponseMs || 0;
+    document.getElementById('stat-response').textContent = String(avgMs).padStart(2, '0') + 'ms';
+    document.getElementById('stat-response-bar').style.width = (stats.responseBarPercent || 5) + '%';
+
+    document.getElementById('stat-nodes').textContent = (stats.activeEuNodes || 0).toLocaleString();
+
+    const breachRec = stats.liveInterceptions || 0;
+    if (breachRec >= 1e9)      document.getElementById('stat-interceptions').textContent = (breachRec / 1e9).toFixed(1) + 'B';
+    else if (breachRec >= 1e6) document.getElementById('stat-interceptions').textContent = (breachRec / 1e6).toFixed(1) + 'M';
+    else                       document.getElementById('stat-interceptions').textContent = breachRec.toLocaleString();
+    document.getElementById('stat-intercept-bar').style.width = (stats.interceptBarPercent || 2) + '%';
+  }
+
+  // ─── Main Fetch ─────────────────────────────────
+  async function loadLiveIntel() {
+    try {
+      const resp = await fetch(INTEL_API);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+
+      if (data.radar && data.radar.blips) renderRadarBlips(data.radar.blips);
+      if (data.map && data.map.countryActivity) renderCountryActivity(data.map.countryActivity);
+      if (data.map && data.map.certMarkers) renderCertMarkers(data.map.certMarkers);
+      if (data.activeThreats)    renderThreatCards(data.activeThreats);
+      if (data.communicationLog) renderCommLog(data.communicationLog);
+      if (data.panels && data.panels.latestBreaches) renderFeedCards(breachesContainer, data.panels.latestBreaches, 'HIBP');
+      if (data.panels && data.panels.advisories) renderFeedCards(advisoriesContainer, data.panels.advisories, 'CERT');
+      if (data.stats)            updateStatsFromApi(data.stats);
+    } catch (err) {
+      console.warn('[Noctra] Intel fetch failed, retrying…', err.message);
+    }
+  }
+
+  // ─── Boot on visibility ─────────────────────────
+  const radarSection = document.getElementById('radar');
+  let engineStarted = false;
+  const radarObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !engineStarted) {
+        engineStarted = true;
+        threatsContainer.innerHTML = '';
+        if (breachesContainer) breachesContainer.innerHTML = '';
+        if (advisoriesContainer) advisoriesContainer.innerHTML = '';
+        loadLiveIntel();
+        setInterval(loadLiveIntel, 60000);
+      }
+    });
+  }, { threshold: 0.1 });
+  radarObserver.observe(radarSection);
+
+  updateSystemLoadWidget();
+  setInterval(updateSystemLoadWidget, 2400);
+  initGlobalStatusTicker();
+
+});
+</script>
+
+</body>
+</html>

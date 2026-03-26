@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/live-intel.js": {
+      "maxDuration": 30
+    }
+  }
+}
