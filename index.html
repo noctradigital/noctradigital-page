@@ -196,6 +196,20 @@
     color: #131313;
     border-color: #ffb4a8;
   }
+
+  /* Collapsible live intel panels */
+  .intel-collapsible summary {
+    list-style: none;
+  }
+  .intel-collapsible summary::-webkit-details-marker {
+    display: none;
+  }
+  .intel-collapsible .chevron {
+    transition: transform 0.25s ease;
+  }
+  .intel-collapsible[open] .chevron {
+    transform: rotate(180deg);
+  }
 </style>
 
 <!-- Translation System -->
@@ -823,50 +837,61 @@
         <!-- Right: Threats, Nodes, Performance -->
         <div class="space-y-8">
           <!-- Active Threats — LIVE -->
-          <div class="bg-surface-container-low border-l-2 border-secondary-container reveal">
-            <div class="p-6">
-              <div class="flex items-center gap-2 mb-4">
+          <details class="intel-collapsible bg-surface-container-low border-l-2 border-secondary-container reveal">
+            <summary class="p-6 cursor-pointer select-none">
+              <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">warning</span>
                 <h4 class="font-headline text-xs font-bold uppercase tracking-widest text-secondary-container">Active Threats</h4>
-                <span class="ml-auto flex items-center gap-1"><span class="w-1.5 h-1.5 bg-error rounded-full animate-pulse"></span><span class="font-label text-[8px] text-error">LIVE</span></span>
+                <span class="ml-auto flex items-center gap-3">
+                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-error rounded-full animate-pulse"></span><span class="font-label text-[8px] text-error">LIVE</span></span>
+                  <span class="material-symbols-outlined text-secondary-container chevron">expand_more</span>
+                </span>
               </div>
+            </summary>
+            <div class="px-6 pb-6">
               <div id="live-threats-container" class="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
                 <div class="flex items-center justify-center py-8">
                   <span class="font-label text-[10px] text-primary/40 animate-pulse">CONNECTING TO THREAT FEED...</span>
                 </div>
               </div>
             </div>
-          </div>
+          </details>
 
           <!-- Latest Breaches (HIBP) -->
-          <div class="bg-surface-container-low border-l-2 border-primary reveal">
-            <div class="p-6">
-              <div class="flex items-center gap-2 mb-4">
+          <details class="intel-collapsible bg-surface-container-low border-l-2 border-primary reveal">
+            <summary class="p-6 cursor-pointer select-none">
+              <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">dataset</span>
                 <h4 class="font-headline text-xs font-bold uppercase tracking-widest text-primary">Latest Breaches</h4>
+                <span class="ml-auto material-symbols-outlined text-primary chevron">expand_more</span>
               </div>
+            </summary>
+            <div class="px-6 pb-6">
               <div id="live-breaches-container" class="space-y-3 max-h-[260px] overflow-y-auto custom-scrollbar">
                 <div class="flex items-center justify-center py-6">
                   <span class="font-label text-[10px] text-primary/40">WAITING FOR HIBP FEED...</span>
                 </div>
               </div>
             </div>
-          </div>
+          </details>
 
           <!-- Advisories (CERT-EU + National CERTs) -->
-          <div class="bg-surface-container-low border-l-2 border-tertiary reveal">
-            <div class="p-6">
-              <div class="flex items-center gap-2 mb-4">
+          <details class="intel-collapsible bg-surface-container-low border-l-2 border-tertiary reveal">
+            <summary class="p-6 cursor-pointer select-none">
+              <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">policy_alert</span>
                 <h4 class="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">Advisories</h4>
+                <span class="ml-auto material-symbols-outlined text-tertiary chevron">expand_more</span>
               </div>
+            </summary>
+            <div class="px-6 pb-6">
               <div id="advisories-container" class="space-y-3 max-h-[260px] overflow-y-auto custom-scrollbar">
                 <div class="flex items-center justify-center py-6">
                   <span class="font-label text-[10px] text-primary/40">WAITING FOR CERT FEEDS...</span>
                 </div>
               </div>
             </div>
-          </div>
+          </details>
 
         </div>
       </div>
@@ -1188,16 +1213,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       await writeCommand('whoami');
       await wait(420);
-      await writeTypedLine('Kamil Szeibel is a high-stakes cybersecurity architect and penetration testing elite. Specializing in offensive security maneuvers, I disassemble complex networks to reconstruct them into impenetrable strongholds.', 'text-white/80');
+        await writeTypedLine('Kamil Szeibel is a penetration tester focused on ethical hacking and offensive security. I approach systems with an attacker\'s mindset to uncover weaknesses, map attack paths, and develop practical, hands-on understanding of how real compromise happens.', 'text-white/80');
       await wait(480);
       addSpacer(4);
 
       await writeCommand('expertise --list');
       await wait(420);
-      await writeTypedLine('- Advanced Persistent Threat Simulation', 'text-white/80');
-      await writeTypedLine('- Zero-Knowledge Architecture Design', 'text-white/80');
-      await writeTypedLine('- Cryptographic Integrity Audits', 'text-white/80');
-      await writeTypedLine('- Cloud Infrastructure Hardening', 'text-white/80');
+        await writeTypedLine('- Penetration Testing', 'text-white/80');
+        await writeTypedLine('- Privilege Escalation', 'text-white/80');
+        await writeTypedLine('- Network Enumeration', 'text-white/80');
+        await writeTypedLine('- Web Application Security', 'text-white/80');
+        await writeTypedLine('- Active Directory Security', 'text-white/80');
       await wait(460);
       addSpacer(4);
 
