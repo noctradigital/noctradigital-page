@@ -164,7 +164,134 @@
     display: inline-block;
     transform: translateX(var(--brand-offset-x));
   }
+
+  /* Language Selector */
+  .language-selector {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  
+  .lang-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: 1px solid #603e39;
+    background: transparent;
+    color: #e5e2e1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Space Grotesk', sans-serif;
+    text-transform: uppercase;
+  }
+  
+  .lang-btn:hover {
+    border-color: #ffb4a8;
+    color: #ffb4a8;
+  }
+  
+  .lang-btn.active {
+    background-color: #ffb4a8;
+    color: #131313;
+    border-color: #ffb4a8;
+  }
 </style>
+
+<!-- Translation System -->
+<script>
+  const translations = {
+    en: {
+      'nav-home': 'Home',
+      'nav-terminal': 'Terminal',
+      'nav-radar': 'Radar',
+      'nav-mission': 'Mission',
+      'nav-portfolio': 'Portfolio',
+      'nav-contact': 'Contact',
+      'breach-btn': 'BREACH_PROTECTION',
+      'hero-protocol': '_SECURE_PROTOCOLS_ENGAGED',
+      'hero-title': 'Digital Fortresses Secured.',
+      'hero-title-fortress': 'Fortresses',
+      'hero-title-secured': 'Secured.',
+      'hero-desc': 'Elite penetration testing and architectural hardening for the next generation of decentralized infrastructure. We find the holes before the adversaries do.',
+      'hero-btn1': 'DEPLOY DEFENSES',
+      'hero-btn2': '_VIEW_INTEL',
+      'hero-status': 'Global Status',
+      'hero-status-text': 'STABLE // NO BREACH',
+      'hero-scroll': 'SCROLL',
+      'terminal-label': 'TERMINAL',
+      'radar-label': 'Live Intelligence',
+      'radar-system': '_SYSTEM_OPERATIONS',
+      'radar-live': 'LIVE_FEED_ACTIVE',
+      'stat-threats': 'CVEs + Breaches (7d)',
+      'stat-response': 'Avg API Response',
+      'stat-nodes': 'Active Feeds',
+      'stat-breach': 'Breach Records',
+    },
+    pl: {
+      'nav-home': 'Strona główna',
+      'nav-terminal': 'Terminal',
+      'nav-radar': 'Radar',
+      'nav-mission': 'Misja',
+      'nav-portfolio': 'Portfolio',
+      'nav-contact': 'Kontakt',
+      'breach-btn': 'OCHRONA_NARUSZENIA',
+      'hero-protocol': '_BEZPIECZNE_PROTOKOŁY_AKTYWNE',
+      'hero-title': 'Cyfrowe Twierdze Zabezpieczone.',
+      'hero-title-fortress': 'Twierdze',
+      'hero-title-secured': 'Zabezpieczone.',
+      'hero-desc': 'Elitarne testy penetracyjne i wzmacnianie architektury dla następnej generacji zdecentralizowanej infrastruktury. Znajdujemy luki zanim zrobią to przeciwnicy.',
+      'hero-btn1': 'WDRAŻAJ OBRONĘ',
+      'hero-btn2': '_WYŚWIETL_DANE',
+      'hero-status': 'Status Globalny',
+      'hero-status-text': 'STABILNY // BRAK NARUSZENIA',
+      'hero-scroll': 'PRZEWIŃ',
+      'terminal-label': 'TERMINAL',
+      'radar-label': 'Inteligencja Działająca',
+      'radar-system': '_OPERACJE_SYSTEMOWE',
+      'radar-live': 'KANAŁ_NA_ŻYWO_AKTYWNY',
+      'stat-threats': 'CVE + Naruszenia (7d)',
+      'stat-response': 'Średni czas odpowiedzi API',
+      'stat-nodes': 'Aktywne kanały',
+      'stat-breach': 'Rekordy Naruszenia',
+    }
+  };
+
+  let currentLang = 'en';
+
+  function initLanguage() {
+    const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+    setLanguage(savedLang);
+  }
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('selectedLanguage', lang);
+    applyTranslations(lang);
+    updateLanguageButtons(lang);
+  }
+
+  function applyTranslations(lang) {
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      if (translations[lang][key]) {
+        element.textContent = translations[lang][key];
+      }
+    });
+    document.documentElement.lang = lang;
+  }
+
+  function updateLanguageButtons(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.getAttribute('data-lang') === lang) {
+        btn.classList.add('active');
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initLanguage);
+</script>
 <script>
   tailwind.config = {
     darkMode: "class",
@@ -278,16 +405,22 @@
 <header id="topbar" class="fixed top-0 w-full z-50 border-b border-secondary-container/20 bg-[#131313]/60 backdrop-blur-xl flex justify-between items-center px-6 h-16 shadow-[0_0_32px_rgba(150,7,17,0.15)] transition-all duration-300">
   <a id="topbar-brand" href="#hero" class="text-xl font-black tracking-tighter text-primary italic font-headline">Noctra Digital</a>
   <nav class="hidden md:flex space-x-8">
-    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#hero">Home</a>
-    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#terminal">Terminal</a>
-    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#radar">Radar</a>
-    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#capabilities">Mission</a>
-    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#engagements">Portfolio</a>
-    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#contact">Contact</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#hero" data-i18n="nav-home">Home</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#terminal" data-i18n="nav-terminal">Terminal</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#radar" data-i18n="nav-radar">Radar</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#capabilities" data-i18n="nav-mission">Mission</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#engagements" data-i18n="nav-portfolio">Portfolio</a>
+    <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#contact" data-i18n="nav-contact">Contact</a>
   </nav>
-  <button class="bg-primary text-on-primary px-4 py-2 font-headline text-xs font-bold tracking-widest uppercase hover:shadow-[0_0_15px_rgba(255,85,64,0.3)] transition-all active:scale-95">
-    BREACH_PROTECTION
-  </button>
+  <div class="hidden md:flex items-center gap-4">
+    <div class="language-selector">
+      <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">EN</button>
+      <button class="lang-btn" data-lang="pl" onclick="setLanguage('pl')">PL</button>
+    </div>
+    <button class="bg-primary text-on-primary px-4 py-2 font-headline text-xs font-bold tracking-widest uppercase hover:shadow-[0_0_15px_rgba(255,85,64,0.3)] transition-all active:scale-95" data-i18n="breach-btn">
+      BREACH_PROTECTION
+    </button>
+  </div>
   <!-- Mobile Menu Toggle -->
   <button id="mobile-menu-btn" class="md:hidden text-primary">
     <span class="material-symbols-outlined">menu</span>
@@ -347,18 +480,18 @@
       <img alt="Cybernetic network" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAisdXiQE_oqsuhzBO1o7odOmhDlgk0oc3cWqNa83_GaEbJVghUNM4crampyE-5SWFnIrornuRVrELulG35_HNpA5BsbFhuHCh7pH3mpULbpxbpymMStV7xoYBeP4Zg58-QVPrwRoUB_eUEaKRxfk7zVPb9yd1Ta152q0qBGLiL1oBI8Vx5nnjpREDh4DFVo_PoVt0CZyUkgSFmFpnbVy5F1DARwOao_22d_tZ3WpW80lKm10-_7Jag4j7ufq7pCsPcGpxkbNrTuZJj"/>
     </div>
     <div class="relative z-10 max-w-4xl">
-      <p class="font-label text-primary text-sm tracking-[0.3em] mb-4 uppercase">_SECURE_PROTOCOLS_ENGAGED</p>
+      <p class="font-label text-primary text-sm tracking-[0.3em] mb-4 uppercase" data-i18n="hero-protocol">_SECURE_PROTOCOLS_ENGAGED</p>
       <h1 class="font-headline text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter mb-8 uppercase italic glitch-hover glitch-always">
-        Digital <br/><span class="text-primary-container">Fortresses</span> <br/>Secured.
+        Digital <br/><span class="text-primary-container" data-i18n="hero-title-fortress">Fortresses</span> <br/><span data-i18n="hero-title-secured">Secured.</span>
       </h1>
-      <p class="font-body text-lg text-white/60 max-w-xl mb-10 leading-relaxed">
+      <p class="font-body text-lg text-white/60 max-w-xl mb-10 leading-relaxed" data-i18n="hero-desc">
         Elite penetration testing and architectural hardening for the next generation of decentralized infrastructure. We find the holes before the adversaries do.
       </p>
       <div class="flex flex-wrap gap-4">
-        <a href="#capabilities" class="bg-primary text-on-primary px-8 py-4 font-headline font-bold tracking-widest uppercase hover:shadow-[0_0_25px_rgba(255,180,168,0.4)] transition-all inline-block">
+        <a href="#capabilities" class="bg-primary text-on-primary px-8 py-4 font-headline font-bold tracking-widest uppercase hover:shadow-[0_0_25px_rgba(255,180,168,0.4)] transition-all inline-block" data-i18n="hero-btn1">
           DEPLOY DEFENSES
         </a>
-        <a href="#radar" class="border border-outline/30 px-8 py-4 font-headline font-bold tracking-widest uppercase text-primary hover:bg-primary/10 transition-all inline-block">
+        <a href="#radar" class="border border-outline/30 px-8 py-4 font-headline font-bold tracking-widest uppercase text-primary hover:bg-primary/10 transition-all inline-block" data-i18n="hero-btn2">
           _VIEW_INTEL
         </a>
       </div>
@@ -367,14 +500,14 @@
     <div class="absolute bottom-12 right-12 hidden md:block">
       <div class="flex items-center space-x-4 border-l border-secondary-container/40 pl-6 py-2">
         <div class="text-right">
-          <div class="font-label text-[10px] text-white/40 uppercase">Global Status</div>
-          <div id="global-status-text" class="font-headline text-primary font-bold transition-colors duration-300">STABLE // NO BREACH</div>
+          <div class="font-label text-[10px] text-white/40 uppercase" data-i18n="hero-status">Global Status</div>
+          <div id="global-status-text" class="font-headline text-primary font-bold transition-colors duration-300" data-i18n="hero-status-text">STABLE // NO BREACH</div>
         </div>
       </div>
     </div>
     <!-- Scroll indicator -->
     <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-      <span class="font-label text-[9px] text-white/20 uppercase tracking-widest">SCROLL</span>
+      <span class="font-label text-[9px] text-white/20 uppercase tracking-widest" data-i18n="hero-scroll">SCROLL</span>
       <span class="material-symbols-outlined text-white/20 text-sm">expand_more</span>
     </div>
   </section>
@@ -411,29 +544,29 @@
       <div class="mb-12 reveal">
         <div class="flex items-center gap-3 mb-2">
           <span class="material-symbols-outlined text-primary">security</span>
-          <span class="font-label text-primary text-xs uppercase tracking-[0.4em]">_SYSTEM_OPERATIONS</span>
+          <span class="font-label text-primary text-xs uppercase tracking-[0.4em]" data-i18n="radar-system">_SYSTEM_OPERATIONS</span>
         </div>
-        <h2 class="font-headline text-4xl md:text-5xl font-black uppercase italic">Live Intelligence</h2>
+        <h2 class="font-headline text-4xl md:text-5xl font-black uppercase italic" data-i18n="radar-label">Live Intelligence</h2>
         <div class="flex items-center gap-2 mt-4">
           <span class="w-2 h-2 bg-primary animate-pulse"></span>
-          <span class="font-label text-[10px] text-primary tracking-widest">LIVE_FEED_ACTIVE</span>
+          <span class="font-label text-[10px] text-primary tracking-widest" data-i18n="radar-live">LIVE_FEED_ACTIVE</span>
         </div>
       </div>
 
       <!-- Hero Stats Row — LIVE -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 reveal">
         <div class="bg-surface-container-low p-6 border-l-2 border-primary red-glow">
-          <p class="font-label text-[10px] text-primary mb-1 tracking-widest uppercase">CVEs + Breaches (7d)</p>
+          <p class="font-label text-[10px] text-primary mb-1 tracking-widest uppercase" data-i18n="stat-threats">CVEs + Breaches (7d)</p>
           <h3 id="stat-threats-24h" class="font-headline text-3xl font-black text-on-surface tracking-tighter">---</h3>
           <div class="w-full h-1 bg-surface-container-highest mt-4"><div id="stat-threats-bar" class="w-[0%] h-full bg-primary transition-all duration-1000"></div></div>
         </div>
         <div class="bg-surface-container-low p-6 border-l-2 border-primary-container">
-          <p class="font-label text-[10px] text-primary-container mb-1 tracking-widest uppercase">Avg API Response</p>
+          <p class="font-label text-[10px] text-primary-container mb-1 tracking-widest uppercase" data-i18n="stat-response">Avg API Response</p>
           <h3 id="stat-response" class="font-headline text-3xl font-black text-on-surface tracking-tighter">--ms</h3>
           <div class="w-full h-1 bg-surface-container-highest mt-4"><div id="stat-response-bar" class="w-[15%] h-full bg-primary-container transition-all duration-1000"></div></div>
         </div>
         <div class="bg-surface-container-low p-6 border-l-2 border-secondary-container">
-          <p class="font-label text-[10px] text-secondary-container mb-1 tracking-widest uppercase">Active Feeds</p>
+          <p class="font-label text-[10px] text-secondary-container mb-1 tracking-widest uppercase" data-i18n="stat-nodes">Active Feeds</p>
           <h3 id="stat-nodes" class="font-headline text-3xl font-black text-on-surface tracking-tighter">---</h3>
           <div class="flex gap-1 mt-4">
             <div class="h-1 w-4 bg-primary"></div><div class="h-1 w-4 bg-primary"></div>
@@ -441,7 +574,7 @@
           </div>
         </div>
         <div class="bg-surface-container-low p-6 border-l-2 border-error">
-          <p class="font-label text-[10px] text-error mb-1 tracking-widest uppercase">Breach Records</p>
+          <p class="font-label text-[10px] text-error mb-1 tracking-widest uppercase" data-i18n="stat-breach">Breach Records</p>
           <h3 id="stat-interceptions" class="font-headline text-3xl font-black text-on-surface tracking-tighter">0</h3>
           <div class="w-full h-1 bg-surface-container-highest mt-4"><div id="stat-intercept-bar" class="w-[2%] h-full bg-error transition-all duration-1000"></div></div>
         </div>
