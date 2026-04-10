@@ -162,7 +162,7 @@
   #topbar-brand {
     --brand-offset-x: 0px;
     display: inline-block;
-    transform: translateX(var(--brand-offset-x));
+    transform: translateX(calc(var(--brand-offset-x) + 50px));
   }
 
   /* Language Selector */
@@ -209,6 +209,50 @@
   }
   .intel-collapsible[open] .chevron {
     transform: rotate(180deg);
+  }
+
+  /* Past engagement placeholders */
+  @keyframes glitchSweep {
+    0% { transform: translateX(-115%) skewX(-10deg); opacity: 0; }
+    20% { opacity: 0.4; }
+    60% { opacity: 0.9; }
+    100% { transform: translateX(120%) skewX(-10deg); opacity: 0; }
+  }
+  @keyframes popSignal {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.9; }
+    50% { transform: translateY(-2px) scale(1.05); opacity: 1; }
+  }
+  .engagement-glitch {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .engagement-glitch::before,
+  .engagement-glitch::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 85, 64, 0.18) 0,
+      rgba(255, 85, 64, 0.18) 2px,
+      transparent 2px,
+      transparent 7px
+    );
+  }
+  .engagement-glitch::after {
+    background: linear-gradient(110deg, transparent 30%, rgba(255, 180, 168, 0.45) 50%, transparent 70%);
+    animation: glitchSweep 1.3s linear infinite;
+  }
+  .engagement-card:hover .engagement-glitch {
+    opacity: 1;
+  }
+  .engagement-status {
+    animation: popSignal 1.4s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(255, 85, 64, 0.5);
   }
 </style>
 
@@ -418,7 +462,7 @@
      ╚═══════════════════════════════════════════════════╝ -->
 <header id="topbar" class="fixed top-0 w-full z-50 border-b border-secondary-container/20 bg-[#131313]/60 backdrop-blur-xl flex justify-between items-center px-6 h-16 shadow-[0_0_32px_rgba(150,7,17,0.15)] transition-all duration-300">
   <a id="topbar-brand" href="#hero" class="text-xl font-black tracking-tighter text-primary italic font-headline">Noctra Digital</a>
-  <nav class="hidden md:flex space-x-8">
+  <nav class="hidden md:flex space-x-8" style="transform: translateX(55px);">
     <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#hero" data-i18n="nav-home">Home</a>
     <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#terminal" data-i18n="nav-terminal">Terminal</a>
     <a class="nav-link font-headline uppercase tracking-tighter font-bold text-sm text-white/60 hover:text-primary transition-colors pb-1" href="#radar" data-i18n="nav-radar">Radar</a>
@@ -910,40 +954,40 @@
       <!-- Service Card 1 -->
       <div class="bg-surface group hover:bg-surface-container-high transition-all p-10 border border-transparent hover:border-primary/20">
         <div class="mb-8">
-          <span class="material-symbols-outlined text-5xl text-primary transition-transform group-hover:scale-110 duration-500" style="font-variation-settings: 'FILL' 1;">hub</span>
+          <span class="material-symbols-outlined text-5xl text-primary transition-transform group-hover:scale-110 duration-500" style="font-variation-settings: 'FILL' 1;">domain</span>
         </div>
-        <h3 class="font-headline text-2xl font-bold uppercase mb-4">Network Audits</h3>
+        <h3 class="font-headline text-2xl font-bold uppercase mb-4">Active Directory Pentesting</h3>
         <p class="font-body text-white/50 text-sm leading-relaxed mb-8">
-          Deep packet inspection and perimeter testing to identify lateral movement vulnerabilities in enterprise networks.
+          Structured testing of AD environments to identify credential abuse opportunities, insecure permissions, Kerberos weaknesses, lateral movement paths, and domain escalation risks.
         </p>
         <div class="font-label text-[10px] text-primary tracking-widest flex items-center group-hover:translate-x-2 transition-transform">
-          _RUN_SCAN <span class="material-symbols-outlined text-xs ml-2">chevron_right</span>
+          _RUN_AD_TEST <span class="material-symbols-outlined text-xs ml-2">chevron_right</span>
         </div>
       </div>
       <!-- Service Card 2 -->
       <div class="bg-surface group hover:bg-surface-container-high transition-all p-10 border border-transparent hover:border-primary/20">
         <div class="mb-8">
-          <span class="material-symbols-outlined text-5xl text-primary transition-transform group-hover:scale-110 duration-500" style="font-variation-settings: 'FILL' 1;">cloud_lock</span>
+          <span class="material-symbols-outlined text-5xl text-primary transition-transform group-hover:scale-110 duration-500" style="font-variation-settings: 'FILL' 1;">elevation</span>
         </div>
-        <h3 class="font-headline text-2xl font-bold uppercase mb-4">Cloud Security</h3>
+        <h3 class="font-headline text-2xl font-bold uppercase mb-4">Privilege Escalation</h3>
         <p class="font-body text-white/50 text-sm leading-relaxed mb-8">
-          Hardening AWS/Azure/GCP environments against misconfiguration exploits and unauthorized cloud-native pivots.
+          Practical identification of Windows privilege escalation vectors, weak access controls, exposed secrets, service misconfigurations, and other paths to higher privileges.
         </p>
         <div class="font-label text-[10px] text-primary tracking-widest flex items-center group-hover:translate-x-2 transition-transform">
-          _SECURE_CLOUD <span class="material-symbols-outlined text-xs ml-2">chevron_right</span>
+          _CHECK_PRIVESC <span class="material-symbols-outlined text-xs ml-2">chevron_right</span>
         </div>
       </div>
       <!-- Service Card 3 -->
       <div class="bg-surface group hover:bg-surface-container-high transition-all p-10 border border-transparent hover:border-primary/20">
         <div class="mb-8">
-          <span class="material-symbols-outlined text-5xl text-primary transition-transform group-hover:scale-110 duration-500" style="font-variation-settings: 'FILL' 1;">security</span>
+          <span class="material-symbols-outlined text-5xl text-primary transition-transform group-hover:scale-110 duration-500" style="font-variation-settings: 'FILL' 1;">verified_user</span>
         </div>
-        <h3 class="font-headline text-2xl font-bold uppercase mb-4">Threat Intel</h3>
+        <h3 class="font-headline text-2xl font-bold uppercase mb-4">Security Knowledge &amp; Methodology</h3>
         <p class="font-body text-white/50 text-sm leading-relaxed mb-8">
-          Real-time monitoring and dark-web scraping to proactively neutralize upcoming targeted campaigns against your asset.
+          Strong foundation in security principles from CompTIA Security+ combined with deeper hands-on offensive security practice while preparing for OSCP.
         </p>
         <div class="font-label text-[10px] text-primary tracking-widest flex items-center group-hover:translate-x-2 transition-transform">
-          _GENERATE_INTEL <span class="material-symbols-outlined text-xs ml-2">chevron_right</span>
+          _VIEW_APPROACH <span class="material-symbols-outlined text-xs ml-2">chevron_right</span>
         </div>
       </div>
     </div>
@@ -963,47 +1007,54 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 reveal">
       <!-- Case 1 -->
       <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair">
-        <img alt="Server room" class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7QV5od5gLb2A0wlKOd6c8IH3zT68EEtm-D6qggG-vff_R-nzdkuAMZGQEjl99IqQn6VSsIuY1TA7sSXvsPMxi4zz5YDv0vgefCIlT1kZNBZpZW1eu0OeG6jIDwbzzKw5w31LdW2UDypRBZ2JC5GZCPADT_cGn0JdEXveoqPpdRrVI29cZbfNR5M9ktNvyLZBVSnsaVgHE1IXGs47z0MYBp9sB-r41A6BypztgeC7Xe6g29NXIa5-GP5hYT-U5AwA4mqCekzVGK_08"/>
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+        <img alt="Hacking active machine video poster" class="absolute inset-0 w-full h-full object-cover grayscale-[0.15] brightness-50 group-hover:scale-110 transition-transform duration-700" src="https://img.youtube.com/vi/uYlCuebTzsw/maxresdefault.jpg"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80"></div>
         <div class="absolute inset-0 p-6 flex flex-col justify-end">
           <span class="font-label text-[10px] text-primary mb-2 uppercase">OP_GHOST_RUN</span>
-          <h4 class="font-headline text-xl font-bold uppercase">Financial Sector Breach Audit</h4>
-        </div>
-        <div class="absolute top-4 right-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-          <span class="material-symbols-outlined text-sm">visibility</span>
+          <h4 class="font-headline text-xl font-bold uppercase">HTB Active Walkthrough</h4>
+          <a class="mt-4 inline-flex w-fit items-center gap-2 bg-primary text-on-primary px-4 py-2 font-label text-[10px] tracking-[0.2em] uppercase hover:brightness-110 transition-all" href="https://www.youtube.com/watch?v=uYlCuebTzsw" target="_blank" rel="noopener noreferrer">
+            Watch on YouTube
+            <span class="material-symbols-outlined text-sm">open_in_new</span>
+          </a>
         </div>
       </div>
       <!-- Case 2 -->
-      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair">
+      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair engagement-card">
         <img alt="Coding screen" class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3hr_zRHEB8ukjxLSHMoTNtUHdnVZndLOWhKoC2Y-XT3ogk0LAhQMCi-fHT3iLM_X1kLiJmP6tjiQrDae0qrQl9dD8vgfZ5rG3TA-Ws3Z1TmV_1RL0Vd-_ABLv1z6eV87ptFxrXweMayO3gmH-2CCepzTh-jraEJ2sTCjqTs2YuLHr6KMEQaAk5o8ClM-PqBD-L7hLmKLhIwfHCkW66gbL_M4_uWa92wcTO7cicg7DFmOb4LcXkI-kp6GxzAy2w8qp74sTjH0dyajn"/>
         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+        <div class="engagement-glitch"></div>
         <div class="absolute inset-0 p-6 flex flex-col justify-end">
           <span class="font-label text-[10px] text-primary mb-2 uppercase">OP_VOID_STAR</span>
           <h4 class="font-headline text-xl font-bold uppercase">Critical Infrastructure Hardening</h4>
+          <span class="engagement-status mt-3 inline-block font-label text-[10px] tracking-[0.28em] uppercase text-primary">COMING SOON</span>
         </div>
         <div class="absolute top-4 right-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
           <span class="material-symbols-outlined text-sm">visibility</span>
         </div>
       </div>
       <!-- Case 3 -->
-      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair">
+      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair engagement-card">
         <img alt="Modern office" class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTh99JDujhyBkXQZyY1u7J5BGhv-NhFyVaQtJk8-LiFG4KliFo99VbeXF_ooNUOaGZQs6Qo1__GY9wmFFrX2xDGCtcgq5hz5t3woCUlFAPqbYAM2csKK32DeToHTKvDcnHRHX_MpKgw3qFXg1ilR2MYF4Y0VG8HEiDkCjgrMkni5I_0o3wZuTsUM0QPH6vgGj6cOZFV3u7OvhcADqoa6yzoR5pXqwqRRcni8YBk0-UChPoYERV4sfy6ZozJ6lQcv1kWgl7S7XKBNvE"/>
         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+        <div class="engagement-glitch"></div>
         <div class="absolute inset-0 p-6 flex flex-col justify-end">
           <span class="font-label text-[10px] text-primary mb-2 uppercase">OP_IRON_GATE</span>
           <h4 class="font-headline text-xl font-bold uppercase">Identity Access Overhaul</h4>
+          <span class="engagement-status mt-3 inline-block font-label text-[10px] tracking-[0.28em] uppercase text-primary">STAY TUNED</span>
         </div>
         <div class="absolute top-4 right-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
           <span class="material-symbols-outlined text-sm">visibility</span>
         </div>
       </div>
       <!-- Case 4 -->
-      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair">
+      <div class="relative aspect-[3/4] overflow-hidden group cursor-crosshair engagement-card">
         <img alt="Technology" class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTYi8KV1le1NfmC018LpBNh4N_RA0z8cKn8T51UrWTcU8SIl0D3PZWYBzkhH4QeEgB2Kqc5-numGC6NdtqjM_GfTgCV2YTxCrdyTffwrBoToFI1UkHUeH_mOVEg9A1Pr_rUPpAWjGJI8Tt0EE78_QmZ1DGKVWk4mOBq8fPWOqJGrZifUiSRypn4BJYppym4PuIN5JfkMrWyo1MVZhMLE6K_7VHtUVpdDA4ODlVVYMxo3x9cK4tcIziVXit_Vc-dC_2yIuLq7Y2joG6"/>
         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+        <div class="engagement-glitch"></div>
         <div class="absolute inset-0 p-6 flex flex-col justify-end">
           <span class="font-label text-[10px] text-primary mb-2 uppercase">OP_PULSE_WAVE</span>
           <h4 class="font-headline text-xl font-bold uppercase">Global DNS Security Sync</h4>
+          <span class="engagement-status mt-3 inline-block font-label text-[10px] tracking-[0.28em] uppercase text-primary">COMING SOON</span>
         </div>
         <div class="absolute top-4 right-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
           <span class="material-symbols-outlined text-sm">visibility</span>
@@ -1058,9 +1109,9 @@
        ══════════════════════════════════════════════════ -->
   <footer class="w-full border-t border-secondary-container/20 py-12 bg-surface-container-lowest flex flex-col items-center justify-center space-y-8">
     <div class="flex space-x-12">
-      <a class="font-label text-[10px] tracking-[0.2em] text-white/40 hover:text-primary transition-colors underline decoration-dotted" href="#">_GITHUB</a>
-      <a class="font-label text-[10px] tracking-[0.2em] text-white/40 hover:text-primary transition-colors underline decoration-dotted" href="#">_LINKEDIN</a>
-      <a class="font-label text-[10px] tracking-[0.2em] text-white/40 hover:text-primary transition-colors underline decoration-dotted" href="#">_X</a>
+      <a class="font-label text-[10px] tracking-[0.2em] text-white/40 hover:text-primary transition-colors underline decoration-dotted" href="https://github.com/murknit3" target="_blank" rel="noopener noreferrer">_GITHUB</a>
+      <a class="font-label text-[10px] tracking-[0.2em] text-white/40 hover:text-primary transition-colors underline decoration-dotted" href="https://www.linkedin.com/in/kamilszeibel/" target="_blank" rel="noopener noreferrer">_LINKEDIN</a>
+      <a class="font-label text-[10px] tracking-[0.2em] text-white/40 hover:text-primary transition-colors underline decoration-dotted" href="https://www.youtube.com/@murknit3" target="_blank" rel="noopener noreferrer">_YOUTUBE</a>
     </div>
     <div class="text-center">
       <p class="font-label text-[10px] tracking-[0.2em] text-white/20 uppercase">
@@ -1267,6 +1318,26 @@ document.addEventListener('DOMContentLoaded', () => {
     'CRITICAL': { text: '#ffb4ab', bg: 'rgba(147,0,10,0.3)',     border: 'rgba(147,0,10,0.5)' },
   };
 
+  function escapeHtml(value = '') {
+    return String(value).replace(/[&<>'"`]/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;',
+      '`': '&#96;',
+    }[char]));
+  }
+
+  function safeExternalUrl(value = '') {
+    try {
+      const parsed = new URL(String(value || ''), window.location.origin);
+      return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? parsed.href : '#';
+    } catch {
+      return '#';
+    }
+  }
+
   const svgNS = 'http://www.w3.org/2000/svg';
   const blipsContainer = document.getElementById('radar-blips');
   const certMarkerLayer = document.getElementById('cert-marker-layer');
@@ -1425,15 +1496,18 @@ document.addEventListener('DOMContentLoaded', () => {
     (items || []).slice(0, 8).forEach((item) => {
       const row = document.createElement('a');
       row.className = 'block p-3 bg-surface-container-lowest border border-outline-variant/10 hover:border-primary/30 transition-all';
-      row.href = item.url || '#';
+      row.href = safeExternalUrl(item.url);
       row.target = '_blank';
       row.rel = 'noopener noreferrer';
 
       const when = item.timestamp ? new Date(item.timestamp).toLocaleDateString('en-GB') : '--';
+      const safeSource = escapeHtml(sourceLabel || item.source || 'FEED');
+      const safeTitle = escapeHtml(item.title || 'Untitled advisory');
+      const safeSummary = escapeHtml((item.summary || '').slice(0, 140));
       row.innerHTML = `
-        <p class="font-label text-[9px] text-primary/70 uppercase tracking-widest mb-1">${sourceLabel || item.source || 'FEED'} // ${when}</p>
-        <p class="font-headline text-[11px] text-on-surface uppercase tracking-wide leading-tight mb-1">${item.title || 'Untitled advisory'}</p>
-        <p class="font-body text-[10px] text-on-surface-variant leading-relaxed">${(item.summary || '').slice(0, 140)}</p>
+        <p class="font-label text-[9px] text-primary/70 uppercase tracking-widest mb-1">${safeSource} // ${when}</p>
+        <p class="font-headline text-[11px] text-on-surface uppercase tracking-wide leading-tight mb-1">${safeTitle}</p>
+        <p class="font-body text-[10px] text-on-surface-variant leading-relaxed">${safeSummary}</p>
       `;
       container.appendChild(row);
     });
@@ -1501,6 +1575,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const metaText = item.type === 'cve'
         ? `${item.vendor ? `VENDOR: ${String(item.vendor).toUpperCase()} // ` : ''}${timeText}`
         : `${locationText} // ${timeText}`;
+      const safeSeverity = escapeHtml(sev);
+      const safeSource = escapeHtml(item.source || '');
+      const safeTitle = escapeHtml(item.title || item.type || 'UNKNOWN');
+      const safeMeta = escapeHtml(metaText);
+      const safeSummary = escapeHtml(item.summary || item.description || '');
 
       const card = document.createElement('div');
       card.className = 'p-4 relative transition-all duration-500';
@@ -1508,12 +1587,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       card.innerHTML = `
         <div class="flex justify-between items-start mb-2">
-          <span class="font-label text-[10px] uppercase tracking-tighter" style="color:${colors.text}">Severity: ${sev}</span>
-          <span class="font-label text-[10px] text-on-surface-variant">${item.source || ''}</span>
+          <span class="font-label text-[10px] uppercase tracking-tighter" style="color:${colors.text}">Severity: ${safeSeverity}</span>
+          <span class="font-label text-[10px] text-on-surface-variant">${safeSource}</span>
         </div>
-        <p class="font-headline text-sm font-bold text-on-surface mb-1 tracking-wide uppercase">${item.title || item.type || 'UNKNOWN'}</p>
-        <p class="font-label text-[9px] text-primary/50 mb-2">${metaText}</p>
-        <p class="font-body text-[11px] text-on-surface-variant leading-relaxed">${item.summary || item.description || ''}</p>
+        <p class="font-headline text-sm font-bold text-on-surface mb-1 tracking-wide uppercase">${safeTitle}</p>
+        <p class="font-label text-[9px] text-primary/50 mb-2">${safeMeta}</p>
+        <p class="font-body text-[11px] text-on-surface-variant leading-relaxed">${safeSummary}</p>
         ${isHigh ? `<div class="mt-3 flex gap-2">
           <button class="flex-1 bg-secondary-container text-on-secondary-container font-label text-[10px] py-1.5 uppercase tracking-widest hover:brightness-125 transition-all">COUNTER</button>
           <button class="flex-1 bg-surface-container-low text-on-surface font-label text-[10px] py-1.5 uppercase tracking-widest border border-outline-variant/20">TRACE</button>
@@ -1541,10 +1620,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const isAlert = item.severity === 'HIGH' || item.severity === 'CRITICAL';
       const colorClass = isAlert ? 'text-error' : 'text-on-surface';
       const statusColor = isAlert ? 'text-error' : 'text-primary';
+      const safeText = escapeHtml(item.line || item.text || '');
 
       entry.innerHTML = `
         <span class="font-label text-[10px] text-primary/60">${item.timestamp ? new Date(item.timestamp).toLocaleTimeString('en-US', {hour12:false}) : ''}</span>
-        <span class="font-label text-xs ${colorClass} col-span-2 truncate">${item.line || item.text || ''}</span>
+        <span class="font-label text-xs ${colorClass} col-span-2 truncate">${safeText}</span>
         <span class="font-label text-[10px] ${statusColor} text-right uppercase">${isAlert ? '_BLOCKED' : '_LOGGED'}</span>
       `;
 

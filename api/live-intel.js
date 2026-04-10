@@ -7,6 +7,71 @@
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min
 let cache = { intel: null, updatedAt: 0 };
 
+const RATE_WINDOW_MS = 60 * 1000;
+const RATE_MAX_REQUESTS = 60;
+const rateState = new Map();
+
+function setSecurityHeaders(res) {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+}
+
+function getAllowedOrigins() {
+  return String(process.env.ALLOWED_ORIGINS || process.env.ALLOWED_ORIGIN || "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+}
+
+function setCorsHeaders(req, res) {
+  const requestOrigin = String(req.headers.origin || "").trim();
+  const allowedOrigins = getAllowedOrigins();
+
+  if (!requestOrigin || allowedOrigins.length === 0) {
+    return;
+  }
+
+  if (allowedOrigins.includes(requestOrigin)) {
+    res.setHeader("Access-Control-Allow-Origin", requestOrigin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  }
+}
+
+function getClientKey(req) {
+  const xff = String(req.headers["x-forwarded-for"] || "");
+  const firstIp = xff.split(",")[0].trim();
+  return firstIp || "unknown";
+}
+
+function isRateLimited(req) {
+  const now = Date.now();
+  const key = getClientKey(req);
+  const entry = rateState.get(key) || { count: 0, windowStart: now };
+
+  if (now - entry.windowStart >= RATE_WINDOW_MS) {
+    entry.count = 0;
+    entry.windowStart = now;
+  }
+
+  entry.count += 1;
+  rateState.set(key, entry);
+
+  if (rateState.size > 2000) {
+    for (const [mapKey, value] of rateState) {
+      if (now - value.windowStart >= RATE_WINDOW_MS) {
+        rateState.delete(mapKey);
+      }
+    }
+  }
+
+  return entry.count > RATE_MAX_REQUESTS;
+}
+
 // ════════════════════════════════════════════════════
 // SVG RADAR COORDINATES  (match index.html EU map)
 // ════════════════════════════════════════════════════
@@ -544,8 +609,8 @@ async function buildIntelPayload() {
 // VERCEL HANDLER
 // ════════════════════════════════════════════════════
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  setSecurityHeaders(res);
+  setCorsHeaders(req, res);
 
   if (req.method === "OPTIONS") {
     res.status(204).end();
@@ -554,6 +619,13 @@ export default async function handler(req, res) {
 
   if (req.method !== "GET") {
     res.status(405).end("Method Not Allowed");
+    return;
+  }
+
+  if (isRateLimited(req)) {
+    res.setHeader("Retry-After", "60");
+    res.setHeader("Content-Type", "application/json");
+    res.status(429).end(JSON.stringify({ ok: false, error: "Too many requests", generatedAt: nowIso() }));
     return;
   }
 
